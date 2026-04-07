@@ -1,0 +1,587 @@
+/* =========================================================================
+   1. CONFIGURAÇÕES GERAIS E VARIÁVEIS
+   ========================================================================= */
+:root {
+    --cor-principal: #ffffff;
+    --cor-fundo: #f3f5f9;
+    --cor-destaque: #8a2be2; /* Roxo vibrante para botões e detalhes */
+    --cor-texto: #1a1e2a;
+    --cor-area: #0084ff;    /* Azul para destaque de área */
+    --cor-custo: #3f3f3f;   /* Cinza para custos de fábrica */
+    --cor-vendas: #6a1b9a;  /* Roxo escuro para valores de venda */
+    
+    --efeito-vidro: rgba(255, 255, 255, 0.4);
+    --sombra-card: 0 10px 30px rgba(0, 0, 0, 0.15);
+    --arredondamento: 20px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    /* Adicionada a camada rgba para clarear a imagem de fundo */
+    background: linear-gradient(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3)),
+                url('../img/595.jpg'); 
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+    color: var(--cor-texto);
+}
+
+/* CLASSE ÚNICA PARA ESCONDER ELEMENTOS (Login ou Sistema) */
+.oculto {
+    display: none !important;
+}
+
+/* =========================================================================
+   2. NAVBAR E LOGO (MENU SUPERIOR)
+   ========================================================================= */
+.navbar {
+    width: 100%;
+    padding: 20px 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    z-index: 10;
+}
+
+.logo-img {
+    height: 180px;
+    width: auto;
+    filter: none !important;
+    transition: transform 0.3s ease;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.nav-links li {
+    position: relative;
+}
+
+/* Padronização: Todos os links do menu estritamente brancos */
+.nav-links li a {
+    color: #ffffff !important; 
+    text-decoration: none;
+    font-weight: 500;
+    padding-bottom: 5px;
+    transition: 0.3s;
+}
+
+/* Efeito de brilho suave ao passar o mouse */
+.nav-links li a:hover {
+    filter: brightness(1.2);
+    text-shadow: 0 0 8px var(--cor-area);
+}
+
+/* ANIMAÇÃO DO SUBLINHADO (Esquerda para Direita) */
+.nav-links li a::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: white;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.nav-links li a:hover::after {
+    transform: scaleX(1);
+}
+
+.nav-login-btn {
+    background: transparent;
+    border: 2px solid white;
+    color: white;
+    padding: 8px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.nav-login-btn:hover {
+    background: white;
+    color: var(--cor-destaque);
+}
+
+/* =========================================================================
+   3. MENUS DROPDOWN (CONTATO, SERVIÇOS, SOBRE)
+   ========================================================================= */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: rgba(26, 30, 42, 0.95);
+    min-width: 300px;
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.4);
+    padding: 20px;
+    border-radius: 12px;
+    color: white;
+    margin-top: 10px;
+    text-align: left;
+    z-index: 100;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-content h3 { 
+    color: var(--cor-destaque); 
+    margin-bottom: 15px; 
+    font-size: 1.1rem; 
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 8px;
+}
+
+.dropdown-content p { 
+    display: flex;
+    align-items: center;
+    font-size: 0.88rem; 
+    margin: 12px 0; 
+    line-height: 1.4; 
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.dropdown-content hr { 
+    border: 0; 
+    border-top: 1px solid rgba(255,255,255,0.1); 
+    margin: 10px 0; 
+}
+
+/* Ícones padronizados dentro dos dropdowns */
+.dropdown-content i, 
+.dropdown-content p i {
+    width: 20px;
+    color: var(--cor-destaque);
+    margin-right: 10px;
+    font-size: 1.1rem;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Ajustes específicos de largura e texto */
+.dropdown-servicos:hover .dropdown-content { min-width: 320px; }
+.dropdown-sobre:hover .dropdown-content { min-width: 350px; }
+
+.dropdown-sobre .dropdown-content p {
+    text-align: justify;
+    line-height: 1.6;
+}
+
+.contato-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+    font-size: 0.88rem;
+    color: white;
+}
+
+/* =========================================================================
+   4. TELA DE LOGIN (MODAL DE ACESSO)
+   ========================================================================= */
+.secao-login {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Estilo do Cartão de Login - Centralização Reforçada */
+.login-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(15px);
+    padding: 40px;
+    border-radius: var(--arredondamento);
+    width: 380px;
+    
+    /* Garante que o conteúdo interno esteja centralizado */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    
+    text-align: center;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    animation: deslizarAparecer 0.5s ease-out;
+}
+
+/* Ajuste do Título: Maior e mais alto */
+.login-card h2 { 
+    margin-top: -10px;    /* Sobe o título em direção ao topo da caixa */
+    margin-bottom: 35px;  /* Aumenta o espaço entre o título e os campos */
+    font-size: 2.2rem;    /* Aumenta o tamanho do texto (era 1.8) */
+    font-weight: 800;     /* Deixa a fonte mais "pesada" e visível */
+    color: var(--cor-texto); 
+    line-height: 1.1;     /* Ajusta o espaçamento entre linhas se o título quebrar */
+}
+
+/* Campos de entrada permanecem com a lógica da âncora */
+.input-group-login { 
+    text-align: left; 
+    margin-bottom: 25px;  /* Aumentei um pouco para dar mais respiro */
+    position: relative; 
+}
+
+.input-group-login label { 
+    display: block; 
+    font-size: 0.9rem; 
+    margin-bottom: 8px; 
+    font-weight: 600; 
+    /* Adicionamos a transição para o movimento ser suave */
+    transition: all 0.3s ease; 
+}
+
+/* ========================================================
+   NOVO: EFEITO DE LEVANTAR O TEXTO (HOVER E FOCUS)
+   ======================================================== */
+.input-group-login:hover label,
+.input-group-login:focus-within label {
+    transform: translateY(-7px); /* Sobe o texto em 7 pixels */
+    color: var(--cor-area);      /* Muda a cor para o seu Azul de destaque */
+}
+
+/* Bônus: Faz a linha do campo também ficar azul para combinar com o texto */
+.input-group-login:hover input,
+.input-group-login:focus-within input {
+    border-bottom: 2px solid var(--cor-area);
+}
+
+/* Esta é a regra que joga o ícone para a ESQUERDA */
+.icon-input { 
+    position: absolute; 
+    right: 0;      /* Força a ficar encostado na esquerda */
+    bottom: 12px; /* Altura exata da linha */
+    color: var(--cor-texto); 
+    font-size: 1.1rem;
+    pointer-events: none; /* Garante que o ícone não atrapalhe o clique no campo */
+}
+
+.input-group-login input {
+    width: 100%;
+    /* O valor 35px cria um buraco vazio na esquerda para o ícone entrar */
+    padding: 12px 12px 12px 35px; 
+    border: none;
+    border-bottom: 2px solid var(--cor-texto);
+    background: transparent;
+    font-size: 1rem;
+    outline: none;
+}
+
+.login-opcoes { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 25px; }
+
+.btn-login {
+    width: 100%; padding: 15px; background: var(--cor-texto);
+    color: white; border: none; border-radius: 10px;
+    font-weight: bold; cursor: pointer; transition: 0.3s;
+}
+
+.btn-login:hover { background: #333; }
+
+/* =========================================================================
+   5. TELA DO SISTEMA (CALCULADORA DE LAJES)
+   ========================================================================= */
+.main-container {
+    display: flex;
+    flex-direction: column; /* Coloca o título em cima e o card embaixo */
+    align-items: center;    /* Centraliza os dois horizontalmente */
+    justify-content: center; /* Centraliza verticalmente na tela */
+    min-height: 100vh;      /* Ocupa a altura toda da tela */
+    padding: 20px;
+}
+
+.calculadora-card {
+    background: rgba(255, 255, 255, 0.92);
+    padding: 40px;
+    border-radius: var(--arredondamento);
+    width: 90%;
+    max-width: 850px;
+    box-shadow: var(--sombra-card);
+}
+
+.header-principal { text-align: center; margin-bottom: 30px; }
+.logo-text {
+    font-size: 3rem;        /* Tamanho grande e imponente */
+    font-weight: 900;       /* Fonte bem grossa */
+    color: #ffffff;         /* COR ALTERADA PARA BRANCO */
+    text-transform: uppercase;
+    letter-spacing: 2px;    /* Espaçamento elegante entre as letras */
+    display: block;
+    /* Adicionei uma sombra leve para o branco não "sumir" se o fundo for claro */
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5); 
+}
+
+.resumo-grid { display: flex; gap: 15px; margin-top: 25px; flex-wrap: wrap; }
+
+.resumo-tag {
+    flex: 1 1 200px;
+    padding: 20px;
+    border-radius: 15px;
+    color: white;
+    text-align: center;
+}
+
+.tag-area { background-color: var(--cor-area); }
+.tag-custo { background-color: var(--cor-custo); }
+.tag-vendas { background-color: var(--cor-vendas); }
+
+.resumo-label { display: block; font-size: 0.8rem; opacity: 0.9; margin-bottom: 5px; }
+.resumo-value { font-size: 1.4rem; font-weight: 700; }
+
+/* =========================================================================
+   6. RESPONSIVIDADE (TABLETS E CELULARES)
+   ========================================================================= */
+@media (max-width: 1024px) {
+    .navbar {
+        padding: 15px 20px;
+    }
+    
+    .logo-img {
+        height: 120px; /* Reduz a logo em telas menores */
+    }
+
+    .nav-links {
+        gap: 15px; /* Aproxima os itens do menu */
+    }
+
+    .login-card {
+        width: 90%;
+        padding: 30px;
+    }
+
+    .calculadora-card {
+        width: 95%;
+        padding: 25px;
+    }
+
+    /* Aumenta a área de toque para inputs em tablets/celulares */
+    .input-group-login input {
+        height: 50px;
+        font-size: 16px;
+    }
+
+    .btn-login {
+        height: 55px;
+        font-size: 16px;
+    }
+}
+
+/* =========================================================================
+   5.1 ESTILOS DOS CAMPOS DA CALCULADORA E BOTÕES
+   ========================================================================= */
+
+/* Agrupa os campos de Custo, Frete e Lucro lado a lado */
+.inputs-inline {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap; /* Permite quebrar linha em telas menores */
+}
+
+/* Container do campo de texto + Unidade (R$, %, m) */
+.input-icon-group {
+    display: flex;
+    align-items: center;
+    background: #f8f9fa;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 0 15px;
+    flex: 1; /* Faz todos terem a mesma largura */
+    min-width: 120px;
+}
+
+.input-icon-group input {
+    border: none;
+    background: transparent;
+    padding: 12px 0;
+    width: 100%;
+    font-size: 1rem;
+    outline: none;
+    color: var(--cor-texto);
+}
+
+.input-icon-group .unidade {
+    font-weight: bold;
+    color: #666;
+    margin-left: 10px;
+}
+
+/* =========================================================================
+   5.2 BOTÕES DE OPÇÃO (Segmented Controls - EPS/Cerâmica)
+   ========================================================================= */
+.control-group-container {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.control-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+.segmented-control {
+    display: flex;
+    background: #e9ecef;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #ccc;
+}
+
+.segmented-btn {
+    flex: 1;
+    padding: 10px 20px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-weight: bold;
+    color: #555;
+    transition: 0.3s;
+}
+
+/* O botão que estiver selecionado ganha a cor de destaque (Roxo) */
+.segmented-btn.active {
+    background: var(--cor-destaque);
+    color: white;
+}
+
+/* Container de Largura e Comprimento */
+.inputs-container {
+    margin-bottom: 30px;
+}
+
+.input-card {
+    display: flex;
+    gap: 15px;
+}
+
+/* =========================================================================
+   5.3 BOTÕES DE AÇÃO (CALCULAR E IMPRIMIR)
+   ========================================================================= */
+.botoes-acao {
+    text-align: center;
+    margin-top: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.btn-principal {
+    background: var(--cor-destaque);
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4);
+    transition: all 0.3s ease;
+}
+
+.btn-principal:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(138, 43, 226, 0.6);
+}
+
+.btn-imprimir {
+    background: #333;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: 0.3s;
+}
+
+.btn-imprimir:hover { background: #555; }
+
+/* =========================================================================
+   5.4 CORREÇÃO DE TEXTOS DO RESULTADO (TOTAL E ENGENHARIA)
+   ========================================================================= */
+.resumo-total-container {
+    text-align: center;
+    margin: 30px 0;
+    padding: 20px;
+    background: #f8f9fa; /* Fundo cinza bem clarinho */
+    border-radius: 12px;
+    border: 2px dashed #ccc;
+}
+
+.tag-total-cliente .resumo-label {
+    color: #666; /* Texto escuro para dar leitura no fundo claro */
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.tag-total-cliente .resumo-value {
+    color: var(--cor-destaque); /* Preço final em roxo gigante */
+    font-size: 2.2rem;
+    margin-top: 10px;
+}
+
+/* Organização dos detalhes de Laje/Concreto */
+.detalhes-engenharia {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #eee;
+}
+
+.detalhes-engenharia h3 {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 15px;
+    border-bottom: 2px solid var(--cor-area);
+    display: inline-block;
+}
+
+.grid-engenharia {
+    display: flex;
+    justify-content: space-around;
+}
+
+.eng-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.eng-label { font-size: 0.85rem; color: #666; }
+.eng-value { font-size: 1.2rem; font-weight: bold; color: #333; margin-top: 5px; }
+
+.acoes-finais { text-align: center; }

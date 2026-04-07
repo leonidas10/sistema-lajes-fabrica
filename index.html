@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema Lajes - Login e Orçamento</title>
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+
+<body>
+
+  <section id="tela-login" class="secao-login">
+
+    <nav class="navbar">
+      <div class="nav-logo">
+        <img src="img/logo.png" alt="Logo Lajes Fábrica" class="logo-img">
+      </div>
+      
+      <ul class="nav-links">
+        <li class="dropdown">
+          <a href="index.html" class="dropbtn">Inicio</a>
+          <div class="dropdown-content">
+            <h3>Painel @Tech TI</h3>
+            <p>Bem-vindo ao centro de inteligência da fábrica. Este portal simplifica seus cálculos diários.</p>
+            <hr>
+            <ul class="lista-sobre">
+              <li>
+                <i class="fas fa-play-circle"></i>
+                <div><strong>Acesso:</strong> Clique em "Acessar" para abrir o terminal de orçamentos.</div>
+              </li>
+              <li>
+                <i class="fas fa-microchip"></i>
+                <div><strong>Motor:</strong> Versão 1.0 configurada para lajes treliçadas H8 e H12.</div>
+              </li>
+            </ul>
+            <hr>
+            <p class="suporte-nota">Pronto para iniciar os trabalhos em Betim?</p>
+          </div>
+        </li>
+
+        <li class="dropdown">
+          <a href="#" class="dropbtn">Sobre</a>
+          <div class="dropdown-content">
+            <h3>Sobre o Sistema</h3>
+            <p>O software foi desenvolvido para otimizar e apoiar a gestão operacional da fábrica de lajes.</p>
+            <hr>
+            <ul class="lista-sobre">
+              <li>
+                <i class="fas fa-shield-alt"></i>
+                <div><strong>Acesso Restrito:</strong> Uso exclusivo de colaboradores autorizados.</div>
+              </li>
+              <li>
+                <i class="fas fa-chart-line"></i>
+                <div><strong>Objetivo:</strong> Acompanhamento de produção e gestão de pedidos.</div>
+              </li>
+              <li>
+                <i class="fas fa-check-circle"></i>
+                <div><strong>Eficiência:</strong> Redução de erros e facilidade no acesso aos dados.</div>
+              </li>
+            </ul>
+            <hr>
+            <p class="suporte-nota">Sistema focado na excelência técnica.</p>
+          </div>
+        </li>
+
+        <li class="dropdown">
+          <a href="#" class="dropbtn">Serviços</a>
+          <div class="dropdown-content">
+            <h3>Funcionalidades</h3>
+            <p>O sistema auxilia no controle dos processos internos da fábrica:</p>
+            <hr>
+            <p><i class="fas fa-cog"></i> Controle de produção</p>
+            <p><i class="fas fa-clipboard-list"></i> Gestão de pedidos</p>
+            <p><i class="fas fa-database"></i> Cadastro e consulta de dados</p>
+            <p><i class="fas fa-chart-pie"></i> Relatórios operacionais</p>
+            <hr>
+            <p class="suporte-nota">Engenharia e gestão integradas.</p>
+          </div>
+        </li>
+
+        <li class="dropdown">
+          <a href="#" class="dropbtn">Contato</a>
+          <div class="dropdown-content">
+            <h3>Suporte do Sistema</h3>
+            <p><strong>Uso estritamente interno.</strong></p>
+            <hr>
+            <div class="contato-item">
+              <i class="fas fa-envelope"></i> <span>leonidas.paulino@hotmail.com</span>
+            </div>
+            <div class="contato-item">
+              <i class="fab fa-whatsapp"></i> <span>(31) 99684-8157</span>
+            </div>
+            <hr>
+            <p><strong>Atendimento:</strong> Seg a Sex, 08h às 17h.</p>
+            <p class="suporte-nota">Dúvidas? Entre em contato com o administrador.</p>
+          </div>
+        </li>
+
+        <li><button class="nav-login-btn" onclick="exibirCardLogin()">Acessar</button></li>
+      </ul>
+    </nav>
+
+    <div id="card-login-principal" class="login-card oculto">
+        <h2>Acesso ao Sistema</h2>
+    
+        <div class="input-group-login">
+            <label for="usuario-login">Usuário/E-mail</label>
+            <i class="fas fa-envelope icon-input"></i>
+            <input type="text" id="usuario-login" placeholder="Digite seu e-mail">
+        </div>
+
+        <div class="input-group-login">
+            <label for="senha-login">Senha</label>
+            <i class="fas fa-lock icon-input"></i>
+            <input type="password" id="senha-login" placeholder="••••••••">
+        </div>
+
+        <div class="login-opcoes">
+            <label><input type="checkbox"> Lembrar-me</label>
+            <a href="#">Esqueceu a senha?</a>
+        </div>
+
+        <button class="btn-login" onclick="entrarNoSistema()">Entrar</button>
+    </div>
+
+  </section>
+
+  <main id="tela-sistema" class="main-container oculto">
+    <header class="header-principal">
+      <h1 class="logo-text">SISTEMA DE ORÇAMENTO DE LAJES - FÁBRICA</h1>
+    </header>
+    
+    <div class="calculadora-card">
+      <h2 class="card-title">CÁLCULO E ORÇAMENTO DO VÃO</h2>
+
+      <div class="form-secao">
+
+        <div class="financeiro-container">
+          <h3>CONFIGURAÇÕES DE FÁBRICA / FINANCEIRO</h3>
+          <div class="inputs-inline">
+            <div class="input-icon-group">
+              <input type="number" id="precoM2" placeholder="Custo Produção" value="15.00" step="0.01">
+              <span class="unidade">R$</span>
+            </div>
+            <div class="input-icon-group">
+              <input type="number" id="freteKM" placeholder="Frete Total" value="0.00" step="0.01">
+              <span class="unidade">R$</span>
+            </div>
+            <div class="input-icon-group">
+              <input type="number" id="margemLucro" placeholder="Lucro (%)" value="20">
+              <span class="unidade">%</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="control-group-container">
+          <div class="control-group">
+            <label>Formato da Laje:</label>
+            <div class="segmented-control" id="formatoAreaControl">
+              <button class="segmented-btn active" onclick="alternarFormato('regular', event)">Regular (90º)</button>
+              <button class="segmented-btn" onclick="alternarFormato('irregular', event)">Irregular</button>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label>Tipo de Enchimento:</label>
+            <div class="segmented-control" id="enchimentoControl">
+              <button class="segmented-btn active" onclick="definirEnchimento('eps', event)">EPS (Isopor)</button>
+              <button class="segmented-btn" onclick="definirEnchimento('ceramica', event)">Cerâmica</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="inputs-container">
+          <div class="input-card" id="inputRegular">
+            <div class="input-icon-group">
+              <input type="number" id="larguraVao" placeholder="Largura (m)" step="0.01">
+              <span class="unidade">m</span>
+            </div>
+            <div class="input-icon-group">
+              <input type="number" id="comprimentoVao" placeholder="Comprimento (m)" step="0.01">
+              <span class="unidade">m</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="botoes-acao">
+          <button class="btn-principal" onclick="calcularOrcamento()">CALCULAR ORÇAMENTO</button>
+        </div>
+      </div>
+
+      <div id="resumoResultados" class="resumo-secao oculto">
+        <div class="resumo-grid">
+          <div class="resumo-tag tag-area">
+            <span class="resumo-label">Área total</span>
+            <h3 id="areaVao" class="resumo-value">0.00 m²</h3>
+          </div>
+          <div class="resumo-tag tag-custo">
+            <span class="resumo-label">Custo Fábrica</span>
+            <h3 id="custoProducao" class="resumo-value">R$ 0,00</h3>
+          </div>
+          <div class="resumo-tag tag-vendas">
+            <span class="resumo-label">Venda (c/ Margem)</span>
+            <h3 id="custoVenda" class="resumo-value">R$ 0,00</h3>
+          </div>
+        </div>
+
+        <div class="resumo-total-container">
+          <div class="resumo-tag tag-total-cliente">
+            <span class="resumo-label">TOTAL FINAL (C/ FRETE)</span>
+            <h2 id="precoFinal" class="resumo-value">R$ 0.000,00</h2>
+          </div>
+        </div>
+
+        <div class="detalhes-engenharia">
+          <h3>DETALHES TÉCNICOS</h3>
+          <div class="grid-engenharia">
+            <div class="eng-item">
+              <span class="eng-label">Enchimento</span>
+              <span id="consumoEnchimento" class="eng-value">0 un</span>
+            </div>
+            <div class="eng-item">
+              <span class="eng-label">Concreto (m³)</span>
+              <span id="volumeConcreto" class="eng-value">0.00 m³</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="acoes-finais">
+          <button class="btn-imprimir" onclick="gerarPDF()">IMPRIMIR PDF</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/calculo.js"></script>
+</body>
+
+</html>

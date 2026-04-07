@@ -589,55 +589,41 @@ body {
 .acoes-finais { text-align: center; }
 
 /* =========================================================================
-   AJUSTES PARA CELULAR (RESPONSIVIDADE MÓVEL)
+   AJUSTES PARA CELULAR (RESPONSIVIDADE MÓVEL) - FORÇA MÁXIMA
    ========================================================================= */
 @media (max-width: 768px) {
-    
-    /* 1. Ajusta o cartão principal para não deixar bordas sobrando no celular */
     .calculadora-card {
         padding: 20px 15px !important;
         width: 100% !important;
-        border-radius: 0 !important; /* Tira as bordas arredondadas para parecer um App */
+        border-radius: 0 !important;
     }
 
-    /* 2. Empilha o bloco financeiro (Custo, Frete, Lucro) */
-    .inputs-inline {
-        flex-direction: column !important;
-        gap: 15px !important;
-    }
-
-    /* 3. Empilha os campos de medidas (Regulares e Irregulares) */
+    /* Força a quebra de linha de TUDO que estava lado a lado */
+    .inputs-inline,
     #campos-regular,
-    #campos-irregular > div {
-        flex-direction: column !important;
-        gap: 15px !important;
-    }
-
-    /* 4. Empilha as caixas de resultado (Área, Custo de Fábrica, Venda) */
-    .resumo-grid {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 10px !important;
-    }
-
-    /* 5. Empilha os detalhes de engenharia (Concreto e Enchimento) */
+    #campos-irregular > div,
+    .resumo-grid,
     .grid-engenharia {
         display: flex !important;
         flex-direction: column !important;
-        gap: 10px !important;
+        width: 100% !important;
     }
 
-    /* 6. Ajusta os botões "pill" de escolha da laje para caberem lado a lado */
+    /* Garante que os campos de digitar ocupem a largura inteira do celular */
+    .input-icon-group {
+        width: 100% !important;
+    }
+
     .segmented-control {
-        display: flex;
-        flex-direction: column; /* Deixa um embaixo do outro no celular */
-        gap: 5px;
-    }
-    .segmented-btn {
-        border-radius: 8px !important; /* Arredonda todos os lados */
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 5px !important;
     }
 
-    /* 7. Reduz o tamanho do título do Preço Final para não quebrar a linha */
+    .segmented-btn {
+        border-radius: 8px !important;
+    }
+
     #precoFinal {
         font-size: 1.8rem !important;
     }

@@ -313,19 +313,21 @@ body {
    ========================================================================= */
 .main-container {
     display: flex;
-    flex-direction: column; /* Coloca o título em cima e o card embaixo */
-    align-items: center;    /* Centraliza os dois horizontalmente */
-    justify-content: center; /* Centraliza verticalmente na tela */
-    min-height: 100vh;      /* Ocupa a altura toda da tela */
+    flex-direction: column;
+    align-items: center;    /* O segredo para centralizar na horizontal está aqui */
+    width: 100%;            /* Garante que ele saiba o tamanho total da tela */
+    min-height: 100vh;
     padding: 20px;
+    padding-top: 100px;     /* Ajuste esse valor se precisar afastar do topo */
 }
 
 .calculadora-card {
-    background: rgba(255, 255, 255, 0.92);
+    background: rgba(255, 255, 255, 0.95);
     padding: 40px;
     border-radius: var(--arredondamento);
     width: 90%;
-    max-width: 850px;
+    max-width: 900px;
+    margin: 0 auto;         /* FORÇA A CENTRALIZAÇÃO DO CARTÃO */
     box-shadow: var(--sombra-card);
 }
 
@@ -585,3 +587,58 @@ body {
 .eng-value { font-size: 1.2rem; font-weight: bold; color: #333; margin-top: 5px; }
 
 .acoes-finais { text-align: center; }
+
+/* =========================================================================
+   AJUSTES PARA CELULAR (RESPONSIVIDADE MÓVEL)
+   ========================================================================= */
+@media (max-width: 768px) {
+    
+    /* 1. Ajusta o cartão principal para não deixar bordas sobrando no celular */
+    .calculadora-card {
+        padding: 20px 15px !important;
+        width: 100% !important;
+        border-radius: 0 !important; /* Tira as bordas arredondadas para parecer um App */
+    }
+
+    /* 2. Empilha o bloco financeiro (Custo, Frete, Lucro) */
+    .inputs-inline {
+        flex-direction: column !important;
+        gap: 15px !important;
+    }
+
+    /* 3. Empilha os campos de medidas (Regulares e Irregulares) */
+    #campos-regular,
+    #campos-irregular > div {
+        flex-direction: column !important;
+        gap: 15px !important;
+    }
+
+    /* 4. Empilha as caixas de resultado (Área, Custo de Fábrica, Venda) */
+    .resumo-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+    }
+
+    /* 5. Empilha os detalhes de engenharia (Concreto e Enchimento) */
+    .grid-engenharia {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+    }
+
+    /* 6. Ajusta os botões "pill" de escolha da laje para caberem lado a lado */
+    .segmented-control {
+        display: flex;
+        flex-direction: column; /* Deixa um embaixo do outro no celular */
+        gap: 5px;
+    }
+    .segmented-btn {
+        border-radius: 8px !important; /* Arredonda todos os lados */
+    }
+
+    /* 7. Reduz o tamanho do título do Preço Final para não quebrar a linha */
+    #precoFinal {
+        font-size: 1.8rem !important;
+    }
+}

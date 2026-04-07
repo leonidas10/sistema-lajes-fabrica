@@ -7,7 +7,6 @@
   <title>Sistema Lajes - Login e Orçamento</title>
 
   <link rel="stylesheet" href="css/style.css">
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
@@ -177,18 +176,47 @@
         </div>
 
         <div class="inputs-container">
-          <div class="input-card" id="inputRegular">
-            <div class="input-icon-group">
+          
+          <div class="input-card" id="campos-regular" style="display: flex; gap: 15px;">
+            <div class="input-icon-group" style="flex: 1;">
               <input type="number" id="larguraVao" placeholder="Largura (m)" step="0.01">
               <span class="unidade">m</span>
             </div>
-            <div class="input-icon-group">
+            <div class="input-icon-group" style="flex: 1;">
               <input type="number" id="comprimentoVao" placeholder="Comprimento (m)" step="0.01">
               <span class="unidade">m</span>
             </div>
           </div>
-        </div>
 
+          <div class="input-card" id="campos-irregular" style="display: none; flex-direction: column; gap: 15px;">
+            <p style="font-size: 0.85rem; color: #666; margin-bottom: 5px; text-align: center; font-weight: bold;">
+                Laje fora do esquadro: Informe as 4 paredes
+            </p>
+            
+            <div style="display: flex; gap: 15px;">
+                <div class="input-icon-group" style="flex: 1;">
+                    <input type="number" id="larguraFrente" placeholder="Frente" step="0.01">
+                    <span class="unidade">m</span>
+                </div>
+                <div class="input-icon-group" style="flex: 1;">
+                    <input type="number" id="larguraFundo" placeholder="Fundo" step="0.01">
+                    <span class="unidade">m</span>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 15px;">
+                <div class="input-icon-group" style="flex: 1;">
+                    <input type="number" id="compEsq" placeholder="Lado Esq." step="0.01">
+                    <span class="unidade">m</span>
+                </div>
+                <div class="input-icon-group" style="flex: 1;">
+                    <input type="number" id="compDir" placeholder="Lado Dir." step="0.01">
+                    <span class="unidade">m</span>
+                </div>
+            </div>
+          </div>
+
+        </div>
         <div class="botoes-acao">
           <button class="btn-principal" onclick="calcularOrcamento()">CALCULAR ORÇAMENTO</button>
         </div>

@@ -1,5 +1,5 @@
 /* =========================================================================
-    SISTEMA LAJES FÁBRICA - MOTOR DE CÁLCULO (REVISADO)
+   SISTEMA LAJES FÁBRICA - MOTOR DE CÁLCULO (REVISADO E COMPLETO)
    ========================================================================= */
 
 // 1. VARIÁVEIS E CONFIGURAÇÕES GLOBAIS
@@ -13,7 +13,6 @@ const MARGEM_CONCRETO = 1.20; // Fator de 20% de segurança
 
 // 2. FUNÇÕES DE NAVEGAÇÃO E LOGIN
 
-// Função para mostrar ou esconder o card de login ao clicar em "Acessar"
 function exibirCardLogin() {
     const card = document.getElementById('card-login-principal');
     if (card) {
@@ -21,18 +20,24 @@ function exibirCardLogin() {
     }
 }
 
-// Função para validar login e entrar no sistema
 function entrarNoSistema() {
     const usuario = document.getElementById('usuario-login').value;
     const senha = document.getElementById('senha-login').value;
-    const telaLogin = document.getElementById('tela-login');
+    
+    // Busca pelos dois IDs possíveis para evitar falhas
+    const telaLogin = document.getElementById('secao-login') || document.getElementById('tela-login');
     const telaSistema = document.getElementById('tela-sistema');
 
-    // Validação simples: aceita qualquer credencial preenchida
     if (usuario.trim() !== "" && senha.trim() !== "") {
-        telaLogin.classList.add('oculto');    // Esconde tela de login e navbar
-        telaSistema.classList.remove('oculto'); // Mostra a calculadora
-        console.log("Acesso concedido ao sistema de lajes.");
+        if (telaLogin) {
+            telaLogin.classList.add('oculto');
+            telaLogin.style.display = 'none'; // Garante que a tela suma
+        }
+        if (telaSistema) {
+            telaSistema.classList.remove('oculto');
+            telaSistema.style.display = 'block';
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' }); // Sobe a tela para o usuário
     } else {
         alert("Por favor, preencha o usuário e a senha para acessar.");
     }
@@ -43,16 +48,23 @@ function entrarNoSistema() {
 function alternarFormato(formato, evento) {
     formatoAtual = formato;
     
-    // Gerencia o visual dos botões "pill"
+    // Troca a cor dos botões
     const container = document.getElementById('formatoAreaControl');
     const botoes = container.querySelectorAll('.segmented-btn');
     botoes.forEach(btn => btn.classList.remove('active'));
-    
-    // Adiciona a classe active no botão clicado
     evento.currentTarget.classList.add('active');
-    
-    // Se no futuro você criar campos para "Irregular", a lógica de esconder/mostrar entra aqui
-    console.log("Formato selecionado: " + formatoAtual);
+
+    // Lógica para mostrar/esconder as caixas certas
+    const divRegular = document.getElementById('campos-regular');
+    const divIrregular = document.getElementById('campos-irregular');
+
+    if (formato === 'irregular') {
+        if (divRegular) divRegular.style.display = 'none';
+        if (divIrregular) divIrregular.style.display = 'flex'; 
+    } else {
+        if (divRegular) divRegular.style.display = 'flex';
+        if (divIrregular) divIrregular.style.display = 'none';
+    }
 }
 
 function definirEnchimento(tipo, evento) {
@@ -61,40 +73,53 @@ function definirEnchimento(tipo, evento) {
     const container = document.getElementById('enchimentoControl');
     const botoes = container.querySelectorAll('.segmented-btn');
     botoes.forEach(btn => btn.classList.remove('active'));
-    
     evento.currentTarget.classList.add('active');
-    console.log("Enchimento selecionado: " + enchimentoAtual);
 }
 
 // 4. MOTOR DE CÁLCULO TÉCNICO E FINANCEIRO
 
 function calcularOrcamento() {
-    // Captura de valores das medidas
-    const largura = Number(document.getElementById('larguraVao').value);
-    const comprimento = Number(document.getElementById('comprimentoVao').value);
-    
-    // Captura de valores financeiros
+    let areaTotal = 0;
+
+    // --- CAPTURA DE ÁREA CONFORME O FORMATO ---
+    if (formatoAtual === 'regular') {
+        const largura = Number(document.getElementById('larguraVao').value) || 0;
+        const comprimento = Number(document.getElementById('comprimentoVao').value) || 0;
+        
+        if (largura <= 0 || comprimento <= 0) {
+            alert("Atenção: Informe a largura e o comprimento do vão.");
+            return;
+        }
+        areaTotal = largura * comprimento;
+        
+    } else {
+        // CÁLCULO IRREGULAR (Média das 4 paredes)
+        const frente = Number(document.getElementById('larguraFrente').value) || 0;
+        const fundo = Number(document.getElementById('larguraFundo').value) || 0;
+        const esq = Number(document.getElementById('compEsq').value) || 0;
+        const dir = Number(document.getElementById('compDir').value) || 0;
+        
+        if (frente <= 0 || fundo <= 0 || esq <= 0 || dir <= 0) {
+            alert("Atenção: Para lajes irregulares, informe a medida das 4 paredes.");
+            return;
+        }
+        
+        const mediaLargura = (frente + fundo) / 2;
+        const mediaComprimento = (esq + dir) / 2;
+        areaTotal = mediaLargura * mediaComprimento;
+    }
+
+    // --- CAPTURA DE VALORES FINANCEIROS ---
     const custoFabricaM2 = Number(document.getElementById('precoM2').value) || 0;
     const freteValor = Number(document.getElementById('freteKM').value) || 0;
     const margemLucroPercent = Number(document.getElementById('margemLucro').value) || 0;
 
-    // Validação de entrada
-    if (!largura || !comprimento || largura <= 0 || comprimento <= 0) {
-        alert("Atenção: Informe as dimensões (largura e comprimento) para calcular.");
-        return;
-    }
-
     // --- CÁLCULOS DE ENGENHARIA ---
-    const areaTotal = largura * comprimento;
-    
-    // Cálculo de enchimento baseado no tipo
     let quantidadeEnchimento = (enchimentoAtual === 'eps') 
         ? areaTotal * CONSUMO_EPS_M2 
         : areaTotal * CONSUMO_CERAMICA_M2;
     
-    // Cálculo do volume de concreto com margem de 20%
-    // Base técnica: 0.12m³ de concreto por m² de laje padrão
-    const volumeConcreto = areaTotal * 0.12 * MARGEM_CONCRETO;
+    const volumeConcreto = areaTotal * 0.045 * MARGEM_CONCRETO;
 
     // --- CÁLCULOS FINANCEIROS ---
     const custoTotalProducao = areaTotal * custoFabricaM2;
@@ -102,49 +127,44 @@ function calcularOrcamento() {
     const valorTotalFinal = valorVendaSemFrete + freteValor;
 
     // --- EXIBIÇÃO DOS RESULTADOS NO HTML ---
-    
-    // 1. Mostra a seção de resultados
-    document.getElementById('resumoResultados').classList.remove('oculto');
-
-    // 2. Preenche as Tags de Resumo
-    document.getElementById('areaVao').textContent = `${areaTotal.toFixed(2)} m²`;
-    document.getElementById('custoProducao').textContent = formatarReal(custoTotalProducao);
-    document.getElementById('custoVenda').textContent = formatarReal(valorVendaSemFrete);
-    
-    // 3. Preenche o Preço Final (Destaque)
-    document.getElementById('precoFinal').textContent = formatarReal(valorTotalFinal);
-
-    // 4. Preenche Detalhes Técnicos
-    if(document.getElementById('consumoEnchimento')) {
-        document.getElementById('consumoEnchimento').textContent = `${Math.ceil(quantidadeEnchimento)} un (${enchimentoAtual.toUpperCase()})`;
-    }
-    if(document.getElementById('volumeConcreto')) {
-        document.getElementById('volumeConcreto').textContent = `${volumeConcreto.toFixed(2)} m³`;
-    }
-    if(document.getElementById('outputFrete')) {
-        document.getElementById('outputFrete').textContent = formatarReal(freteValor);
-    }
-    if(document.getElementById('labelMargem')) {
-        document.getElementById('labelMargem').textContent = `${margemLucroPercent}%`;
+    const divResultados = document.getElementById('resumoResultados');
+    if (divResultados) {
+        divResultados.classList.remove('oculto');
+        divResultados.style.display = 'block';
     }
 
-    // Scroll suave para os resultados
-    document.getElementById('resumoResultados').scrollIntoView({ behavior: 'smooth' });
+    preencherTextoSeguro('areaVao', `${areaTotal.toFixed(2).replace('.', ',')} m²`);
+    preencherTextoSeguro('custoProducao', formatarReal(custoTotalProducao));
+    preencherTextoSeguro('custoVenda', formatarReal(valorVendaSemFrete));
+    preencherTextoSeguro('precoFinal', formatarReal(valorTotalFinal));
+    preencherTextoSeguro('consumoEnchimento', `${Math.ceil(quantidadeEnchimento)} un (${enchimentoAtual.toUpperCase()})`);
+    preencherTextoSeguro('volumeConcreto', `${volumeConcreto.toFixed(2).replace('.', ',')} m³`);
+    preencherTextoSeguro('outputFrete', formatarReal(freteValor));
+    preencherTextoSeguro('labelMargem', `${margemLucroPercent}%`);
+
+    if (divResultados) {
+        divResultados.scrollIntoView({ behavior: 'smooth' });
+    }
 }
 
 // 5. UTILITÁRIOS E PDF
 
-// Formatação de moeda brasileira
+// Função para garantir que o sistema não trave se faltar um ID no HTML
+function preencherTextoSeguro(id, texto) {
+    const elemento = document.getElementById(id);
+    if (elemento) {
+        elemento.textContent = texto;
+    }
+}
+
 function formatarReal(valor) {
     return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 
-// Função para gerar o documento oficial em PDF
 function gerarPDF() {
     const conteudoPDF = document.getElementById('resumoResultados');
     
-    // Verifica se há resultados para imprimir
-    if (conteudoPDF.classList.contains('oculto')) {
+    if (!conteudoPDF || conteudoPDF.classList.contains('oculto')) {
         alert("Calcule o orçamento antes de gerar o PDF.");
         return;
     }
@@ -153,9 +173,24 @@ function gerarPDF() {
         margin: 15,
         filename: 'Orcamento_TechTI_Lajes.pdf',
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
+        html2canvas: { scale: 2, useCORS: true }, 
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 
     html2pdf().set(opcoes).from(conteudoPDF).save();
 }
+
+// --- FECHAR LOGIN AO CLICAR FORA ---
+document.addEventListener('mousedown', function(event) {
+    const cardLogin = document.getElementById('card-login-principal');
+    const botaoAcesso = document.querySelector('.nav-login-btn');
+
+    // Verifica se o card de login existe e está visível na tela
+    if (cardLogin && !cardLogin.classList.contains('oculto')) {
+        
+        // Se o clique NÃO foi dentro do card de login E NÃO foi no botão "Acessar"
+        if (!cardLogin.contains(event.target) && !botaoAcesso.contains(event.target)) {
+            cardLogin.classList.add('oculto'); // Esconde o card
+        }
+    }
+});

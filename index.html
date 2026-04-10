@@ -35,6 +35,11 @@
         </div>
       </div>
 
+      <!-- (BOTÂO MOBILE)-->
+      <div class="menu-toggle" id="menu-toggle">
+        ☰
+      </div>
+
       <ul class="nav-links" role="list">
 
         <li class="dropdown">
@@ -338,6 +343,23 @@
           <!-- Bloco Financeiro -->
           <fieldset class="bloco-config">
             <legend><i class="fas fa-cog"></i> Configurações Financeiras</legend>
+            <div class="campo-config">
+              <label for="precoEPS">Preço EPS (Isopor)</label>
+                <div class="input-unidade">
+                <span class="unidade-prefix">R$</span>
+                <input type="number" id="precoEPS" value="3.50" min="0" step="0.01">
+                <span class="unidade-suffix">/un</span>
+            </div>
+          </div>
+
+              <div class="campo-config">
+              <label for="precoCeramica">Preço Lajota (Cerâmica)</label>
+                <div class="input-unidade">
+                <span class="unidade-prefix">R$</span>
+                <input type="number" id="precoCeramica" value="2.80" min="0" step="0.01">
+                <span class="unidade-suffix">/un</span>
+            </div>
+          </div>
             <div class="config-grid">
               <div class="campo-config">
                 <label for="precoM2">Custo de Produção</label>
@@ -486,6 +508,51 @@
             </div>
           </fieldset>
 
+          <fieldset class="bloco-config">
+            <legend><i class="fas fa-image"></i> Identidade da Empresa</legend>
+
+            <div class="config-grid">
+              <div class="campo-config" style="grid-column: 1 / -1">
+                <label for="logoEmpresa">Logo da Empresa (opcional)</label>
+                <div class="input-unidade">
+                  <input
+                    type="file"
+                    id="logoEmpresa"
+                    accept="image/*"
+                    style="padding: 10px;"
+                  >
+                </div>
+                <small style="display:block; margin-top:8px; color:#94a3b8;">
+                  A logo enviada será usada no PDF gerado.
+                </small>
+              </div>
+
+              <div class="campo-config" style="grid-column: 1 / -1">
+                <div id="preview-logo-wrap" style="display:none; margin-top:10px;">
+                  <label>Pré-visualização da logo</label>
+                  <div style="
+                    margin-top:8px;
+                    padding:12px;
+                    border:1px dashed #475569;
+                    border-radius:10px;
+                    background:#0f172a;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    min-height:100px;
+                   ">
+                    <img
+                      id="preview-logo"
+                      src=""
+                      alt="Prévia da logo"
+                      style="max-width:220px; max-height:80px; object-fit:contain;"
+                   >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+
           <div class="calc-acoes">
             <button type="button" class="btn-calcular" id="btn-calcular">
               <i class="fas fa-calculator"></i> CALCULAR ORÇAMENTO
@@ -588,6 +655,7 @@
 
     </div><!-- /sistema-body -->
 
+  
     <footer class="sistema-footer">
       <span>Sistema de Orçamento de Lajes v1.2 — Uso Interno</span>
       <span>Fábrica de Lajes — Betim, MG</span>
@@ -595,13 +663,9 @@
 
   </main>
 
-    <footer class="sistema-footer">
-      <span>Sistema de Orçamento de Lajes v1.2 — Uso Interno</span>
-      <span>Fábrica de Lajes — Betim, MG</span>
-    </footer>
+    <!-- PDF oculto -->
+    <div id="conteudo-pdf" class="pdf-conteudo"></div>
 
-  </main>
-
-  <script src="js/calculo.js"></script>
+    <script src="js/calculo.js"></script>
 </body>
 </html>

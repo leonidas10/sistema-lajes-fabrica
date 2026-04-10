@@ -1150,8 +1150,67 @@ a { text-decoration: none; color: inherit; }
    ============================================================ */
 @media (max-width: 768px) {
   .navbar { padding: 14px 20px; }
-  .nav-links { gap: 2px; }
-  .dropbtn span { display: none; }
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    background: #141720;
+    position: absolute;
+    top: 70px;
+    right: 16px;
+    width: calc(100% - 32px);
+    max-width: 260px;
+    padding: 16px;
+    border-radius: 10px;
+    border: 1px solid var(--cor-borda);
+    gap: 10px;
+    z-index: 300;
+  }
+
+    /* 🟢 MENU ATIVO */
+  .nav-links.active {
+    display: flex;
+  }
+
+  /* ============================= */
+/* 🔥 CORREÇÃO DROPDOWN MOBILE */
+/* ============================= */
+
+.dropdown {
+  width: 100%;
+}
+
+.dropbtn {
+  width: 100%;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* remove posição absoluta no mobile */
+.dropdown-content {
+  position: static;
+  width: 100%;
+  margin-top: 8px;
+  border-radius: 8px;
+  box-shadow: none;
+  border: 1px solid var(--cor-borda);
+  display: none;
+}
+
+/* quando clicar abre */
+.dropdown.open .dropdown-content {
+  display: block;
+}
+
+  /* 🔥 BOTÃO MENU */
+  .menu-toggle {
+    display: block;
+    font-size: 22px;
+    color: white;
+    cursor: pointer;
+  }
+
   .hero-container { padding: 50px 24px; }
   .hero-titulo { font-size: 2.8rem; }
 

@@ -4,269 +4,604 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistema Lajes - Login e Orçamento</title>
+  <meta name="description" content="Sistema interno de orçamento de lajes treliçadas — Fábrica">
+  <title>Sistema Lajes — Login</title>
 
-  <link rel="stylesheet" href="css/style.css?v=2">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 
-  <section id="tela-login" class="secao-login">
+  <!-- ========== TELA DE LOGIN ========== -->
+  <section id="tela-login" class="tela-login">
 
-    <nav class="navbar">
+    <!-- Partículas de fundo -->
+    <div class="bg-grid" aria-hidden="true"></div>
+    <div class="bg-glow" aria-hidden="true"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar" role="navigation" aria-label="Menu principal">
       <div class="nav-logo">
-        <img src="img/logo.png" alt="Logo Lajes Fábrica" class="logo-img">
+        <div class="logo-icon" aria-hidden="true">
+          <i class="fas fa-industry"></i>
+        </div>
+        <div class="logo-text">
+          <span class="logo-main">LAJES</span>
+          <span class="logo-sub">FÁBRICA</span>
+        </div>
       </div>
-      
-      <ul class="nav-links">
+
+      <ul class="nav-links" role="list">
+
         <li class="dropdown">
-          <a href="index.html" class="dropbtn">Inicio</a>
-          <div class="dropdown-content">
-            <h3>Painel @Tech TI</h3>
-            <p>Bem-vindo ao centro de inteligência da fábrica. Este portal simplifica seus cálculos diários.</p>
+          <button class="dropbtn" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-home"></i> Início
+          </button>
+          <div class="dropdown-content" role="menu">
+            <h3><i class="fas fa-microchip"></i> Painel do Sistema</h3>
+            <p>Centro de inteligência da fábrica. Simplifica seus cálculos e orçamentos diários.</p>
             <hr>
-            <ul class="lista-sobre">
-              <li>
-                <i class="fas fa-play-circle"></i>
+            <ul class="lista-sobre" role="list">
+              <li><i class="fas fa-play-circle"></i>
                 <div><strong>Acesso:</strong> Clique em "Acessar" para abrir o terminal de orçamentos.</div>
               </li>
-              <li>
-                <i class="fas fa-microchip"></i>
-                <div><strong>Motor:</strong> Versão 1.0 configurada para lajes treliçadas H8 e H12.</div>
+              <li><i class="fas fa-microchip"></i>
+                <div><strong>Motor:</strong> Versão 1.0 — lajes treliçadas H8 e H12.</div>
               </li>
             </ul>
-            <hr>
-            <p class="suporte-nota">Pronto para iniciar os trabalhos em Betim?</p>
           </div>
         </li>
 
         <li class="dropdown">
-          <a href="#" class="dropbtn">Sobre</a>
-          <div class="dropdown-content">
-            <h3>Sobre o Sistema</h3>
-            <p>O software foi desenvolvido para otimizar e apoiar a gestão operacional da fábrica de lajes.</p>
+          <button class="dropbtn" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-info-circle"></i> Sobre
+          </button>
+          <div class="dropdown-content" role="menu">
+            <h3><i class="fas fa-shield-alt"></i> Sobre o Sistema</h3>
+            <p>Desenvolvido para otimizar a gestão operacional da fábrica de lajes treliçadas.</p>
             <hr>
-            <ul class="lista-sobre">
-              <li>
-                <i class="fas fa-shield-alt"></i>
+            <ul class="lista-sobre" role="list">
+              <li><i class="fas fa-shield-alt"></i>
                 <div><strong>Acesso Restrito:</strong> Uso exclusivo de colaboradores autorizados.</div>
               </li>
-              <li>
-                <i class="fas fa-chart-line"></i>
+              <li><i class="fas fa-chart-line"></i>
                 <div><strong>Objetivo:</strong> Acompanhamento de produção e gestão de pedidos.</div>
               </li>
-              <li>
-                <i class="fas fa-check-circle"></i>
+              <li><i class="fas fa-check-circle"></i>
                 <div><strong>Eficiência:</strong> Redução de erros e facilidade no acesso aos dados.</div>
               </li>
             </ul>
-            <hr>
-            <p class="suporte-nota">Sistema focado na excelência técnica.</p>
           </div>
         </li>
 
         <li class="dropdown">
-          <a href="#" class="dropbtn">Serviços</a>
-          <div class="dropdown-content">
-            <h3>Funcionalidades</h3>
-            <p>O sistema auxilia no controle dos processos internos da fábrica:</p>
+          <button class="dropbtn" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-cogs"></i> Serviços
+          </button>
+          <div class="dropdown-content" role="menu">
+            <h3><i class="fas fa-cogs"></i> Funcionalidades</h3>
+            <p>O sistema auxilia no controle dos processos internos:</p>
             <hr>
-            <p><i class="fas fa-cog"></i> Controle de produção</p>
-            <p><i class="fas fa-clipboard-list"></i> Gestão de pedidos</p>
-            <p><i class="fas fa-database"></i> Cadastro e consulta de dados</p>
-            <p><i class="fas fa-chart-pie"></i> Relatórios operacionais</p>
-            <hr>
-            <p class="suporte-nota">Engenharia e gestão integradas.</p>
+            <div class="servico-item"><i class="fas fa-cog"></i> Controle de produção</div>
+            <div class="servico-item"><i class="fas fa-clipboard-list"></i> Gestão de pedidos</div>
+            <div class="servico-item"><i class="fas fa-database"></i> Cadastro e consulta de dados</div>
+            <div class="servico-item"><i class="fas fa-chart-pie"></i> Relatórios operacionais</div>
           </div>
         </li>
 
         <li class="dropdown">
-          <a href="#" class="dropbtn">Contato</a>
-          <div class="dropdown-content">
-            <h3>Suporte do Sistema</h3>
+          <button class="dropbtn" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-headset"></i> Contato
+          </button>
+          <div class="dropdown-content" role="menu">
+            <h3><i class="fas fa-headset"></i> Suporte do Sistema</h3>
             <p><strong>Uso estritamente interno.</strong></p>
             <hr>
             <div class="contato-item">
-              <i class="fas fa-envelope"></i> <span>leonidas.paulino@hotmail.com</span>
+              <i class="fas fa-envelope"></i> <span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ee828b8180878a8f9dc09e8f9b82878081ae86819a838f8782c08d8183">[email&#160;protected]</a></span>
             </div>
             <div class="contato-item">
               <i class="fab fa-whatsapp"></i> <span>(31) 99684-8157</span>
             </div>
             <hr>
             <p><strong>Atendimento:</strong> Seg a Sex, 08h às 17h.</p>
-            <p class="suporte-nota">Dúvidas? Entre em contato com o administrador.</p>
           </div>
         </li>
 
-        <li><button class="nav-login-btn" onclick="exibirCardLogin()">Acessar</button></li>
+        <li>
+          <button class="btn-acessar" type="button" id="btn-abrir-login">
+            <i class="fas fa-sign-in-alt"></i> Acessar
+          </button>
+        </li>
       </ul>
     </nav>
 
-    <div id="card-login-principal" class="login-card oculto">
-        <h2>Acesso ao Sistema</h2>
-    
-        <div class="input-group-login">
-            <label for="usuario-login">Usuário/E-mail</label>
-            <i class="fas fa-envelope icon-input"></i>
-            <input type="text" id="usuario-login" placeholder="Digite seu e-mail">
+    <!-- Hero -->
+    <div class="hero-container">
+      <div class="hero-badge">
+        <i class="fas fa-shield-alt"></i> Sistema Interno v1.2
+      </div>
+      <h1 class="hero-titulo">
+        SISTEMA DE<br>
+        <span class="hero-destaque">ORÇAMENTO</span><br>
+        DE LAJES
+      </h1>
+      <p class="hero-subtitulo">
+        Plataforma de cálculo e gestão para lajes treliçadas H8 e H12.<br>
+        Precisão técnica a serviço da produção.
+      </p>
+      <button type="button" class="hero-btn" id="btn-visao-geral">
+        <i class="fas fa-th-large"></i> Visão Geral do ERP
+      </button>
+    </div>
+
+    <!-- Modal de Login -->
+    <div id="modal-overlay" class="modal-overlay oculto" role="dialog" aria-modal="true" aria-labelledby="titulo-login">
+      <div class="login-card" id="card-login">
+        <button type="button" class="btn-fechar-modal" id="btn-fechar-login" aria-label="Fechar login">
+          <i class="fas fa-times"></i>
+        </button>
+
+        <div class="login-header">
+          <div class="login-icon"><i class="fas fa-user-shield"></i></div>
+          <h2 id="titulo-login">Acesso ao Sistema</h2>
+          <p>Área restrita a colaboradores autorizados</p>
         </div>
 
-        <div class="input-group-login">
+        <form id="form-login" novalidate>
+          <div class="input-group">
+            <label for="usuario-login">Usuário</label>
+            <div class="input-wrapper">
+              <i class="fas fa-user input-icon" aria-hidden="true"></i>
+              <input
+                type="text"
+                id="usuario-login"
+                name="usuario"
+                placeholder="Digite seu usuário"
+                autocomplete="username"
+                required
+              >
+            </div>
+            <span class="campo-erro" id="erro-usuario" role="alert"></span>
+          </div>
+
+          <div class="input-group">
             <label for="senha-login">Senha</label>
-            <i class="fas fa-lock icon-input"></i>
-            <input type="password" id="senha-login" placeholder="••••••••">
-        </div>
+            <div class="input-wrapper">
+              <i class="fas fa-lock input-icon" aria-hidden="true"></i>
+              <input
+                type="password"
+                id="senha-login"
+                name="senha"
+                placeholder="••••••••"
+                autocomplete="current-password"
+                required
+              >
+              <button type="button" class="btn-toggle-senha" id="toggle-senha" aria-label="Mostrar senha">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+            <span class="campo-erro" id="erro-senha" role="alert"></span>
+          </div>
 
-        <div class="login-opcoes">
-            <label><input type="checkbox"> Lembrar-me</label>
-            <a href="#">Esqueceu a senha?</a>
-        </div>
+          <div class="login-opcoes">
+            <label class="checkbox-label">
+              <input type="checkbox" id="lembrar-me"> Lembrar usuário
+            </label>
+          </div>
 
-        <button class="btn-login" onclick="entrarNoSistema()">Entrar</button>
+          <div id="alerta-login" class="alerta-login oculto" role="alert">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span id="mensagem-alerta">Usuário ou senha inválidos.</span>
+          </div>
+
+          <button type="submit" class="btn-login">
+            <i class="fas fa-sign-in-alt"></i> Entrar
+          </button>
+        </form>
+      </div>
     </div>
 
   </section>
 
-  <main id="tela-sistema" class="main-container oculto">
-    <header class="header-principal">
-      <h1 class="logo-text">SISTEMA DE ORÇAMENTO DE LAJES - FÁBRICA</h1>
-    </header>
-    
-    <div class="calculadora-card">
-      <h2 class="card-title">CÁLCULO E ORÇAMENTO DO VÃO</h2>
+  <!-- ========== MODAL: VISÃO GERAL DO ERP ========== -->
+  <div id="modal-erp" class="modal-overlay oculto" role="dialog" aria-modal="true" aria-labelledby="titulo-erp">
+    <div class="erp-card" id="card-erp">
+      <button type="button" class="btn-fechar-modal" id="btn-fechar-erp" aria-label="Fechar visão geral">
+        <i class="fas fa-times"></i>
+      </button>
 
-      <div class="form-secao">
-
-        <div class="financeiro-container">
-          <h3>CONFIGURAÇÕES DE FÁBRICA / FINANCEIRO</h3>
-          <div class="inputs-inline">
-            <div class="input-icon-group">
-              <input type="number" id="precoM2" placeholder="Custo Produção" value="15.00" step="0.01">
-              <span class="unidade">R$</span>
-            </div>
-            <div class="input-icon-group">
-              <input type="number" id="freteKM" placeholder="Frete Total" value="0.00" step="0.01">
-              <span class="unidade">R$</span>
-            </div>
-            <div class="input-icon-group">
-              <input type="number" id="margemLucro" placeholder="Lucro (%)" value="20">
-              <span class="unidade">%</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="control-group-container">
-          <div class="control-group">
-            <label>Formato da Laje:</label>
-            <div class="segmented-control" id="formatoAreaControl">
-              <button class="segmented-btn active" onclick="alternarFormato('regular', event)">Regular (90º)</button>
-              <button class="segmented-btn" onclick="alternarFormato('irregular', event)">Irregular</button>
-            </div>
-          </div>
-
-          <div class="control-group">
-            <label>Tipo de Enchimento:</label>
-            <div class="segmented-control" id="enchimentoControl">
-              <button class="segmented-btn active" onclick="definirEnchimento('eps', event)">EPS (Isopor)</button>
-              <button class="segmented-btn" onclick="definirEnchimento('ceramica', event)">Cerâmica</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="inputs-container">
-          
-          <div class="input-card" id="campos-regular" style="display: flex; gap: 15px;">
-            <div class="input-icon-group" style="flex: 1;">
-              <input type="number" id="larguraVao" placeholder="Largura (m)" step="0.01">
-              <span class="unidade">m</span>
-            </div>
-            <div class="input-icon-group" style="flex: 1;">
-              <input type="number" id="comprimentoVao" placeholder="Comprimento (m)" step="0.01">
-              <span class="unidade">m</span>
-            </div>
-          </div>
-
-          <div class="input-card" id="campos-irregular" style="display: none; flex-direction: column; gap: 15px;">
-            <p style="font-size: 0.85rem; color: #666; margin-bottom: 5px; text-align: center; font-weight: bold;">
-                Laje fora do esquadro: Informe as 4 paredes
-            </p>
-            
-            <div style="display: flex; gap: 15px;">
-                <div class="input-icon-group" style="flex: 1;">
-                    <input type="number" id="larguraFrente" placeholder="Frente" step="0.01">
-                    <span class="unidade">m</span>
-                </div>
-                <div class="input-icon-group" style="flex: 1;">
-                    <input type="number" id="larguraFundo" placeholder="Fundo" step="0.01">
-                    <span class="unidade">m</span>
-                </div>
-            </div>
-            
-            <div style="display: flex; gap: 15px;">
-                <div class="input-icon-group" style="flex: 1;">
-                    <input type="number" id="compEsq" placeholder="Lado Esq." step="0.01">
-                    <span class="unidade">m</span>
-                </div>
-                <div class="input-icon-group" style="flex: 1;">
-                    <input type="number" id="compDir" placeholder="Lado Dir." step="0.01">
-                    <span class="unidade">m</span>
-                </div>
-            </div>
-          </div>
-
-        </div>
-        <div class="botoes-acao">
-          <button class="btn-principal" onclick="calcularOrcamento()">CALCULAR ORÇAMENTO</button>
-        </div>
+      <div class="erp-header">
+        <div class="erp-icon-wrap"><i class="fas fa-cubes"></i></div>
+        <h2 id="titulo-erp">Visão Geral do ERP</h2>
+        <p>Plataforma modular em desenvolvimento — Fábrica de Lajes</p>
       </div>
 
-      <div id="resumoResultados" class="resumo-secao oculto">
-        <div class="resumo-grid">
-          <div class="resumo-tag tag-area">
-            <span class="resumo-label">Área total</span>
-            <h3 id="areaVao" class="resumo-value">0.00 m²</h3>
+      <div class="erp-grid">
+
+        <!-- Módulos -->
+        <div class="erp-bloco">
+          <h3 class="erp-bloco-titulo"><i class="fas fa-boxes"></i> Módulos Planejados</h3>
+          <ul class="erp-lista">
+            <li class="erp-item ativo"><i class="fas fa-check-circle"></i><span><strong>Orçamentos de Lajes</strong><em>Ativo — Motor v1.2</em></span></li>
+            <li class="erp-item futuro"><i class="fas fa-clock"></i><span><strong>Cadastro de Clientes</strong><em>Em desenvolvimento</em></span></li>
+            <li class="erp-item futuro"><i class="fas fa-clock"></i><span><strong>Controle de Produção</strong><em>Planejado</em></span></li>
+            <li class="erp-item futuro"><i class="fas fa-clock"></i><span><strong>Gestão de Materiais</strong><em>Planejado</em></span></li>
+            <li class="erp-item futuro"><i class="fas fa-clock"></i><span><strong>Relatórios</strong><em>Planejado</em></span></li>
+          </ul>
+        </div>
+
+        <!-- Tecnologias -->
+        <div class="erp-bloco">
+          <h3 class="erp-bloco-titulo"><i class="fas fa-microchip"></i> Tecnologias Utilizadas</h3>
+          <ul class="erp-lista">
+            <li class="erp-item tech"><i class="fab fa-html5"></i><span><strong>HTML5 / CSS3 / JS</strong><em>Frontend puro, sem framework</em></span></li>
+            <li class="erp-item tech"><i class="fas fa-database"></i><span><strong>localStorage (fase 1)</strong><em>Dados locais no navegador</em></span></li>
+            <li class="erp-item tech"><i class="fas fa-server"></i><span><strong>Node.js + SQLite (fase 2)</strong><em>Back-end local planejado</em></span></li>
+            <li class="erp-item tech"><i class="fas fa-desktop"></i><span><strong>Execução local</strong><em>Sem necessidade de internet</em></span></li>
+          </ul>
+        </div>
+
+        <!-- Níveis de Usuário -->
+        <div class="erp-bloco">
+          <h3 class="erp-bloco-titulo"><i class="fas fa-users-cog"></i> Níveis de Acesso</h3>
+          <ul class="erp-lista">
+            <li class="erp-item perfil admin"><i class="fas fa-user-shield"></i>
+              <span><strong>Admin</strong>
+                <em>Acesso total: usuários, configs, relatórios e financeiro</em>
+              </span>
+              <span class="erp-badge badge-admin">ADMIN</span>
+            </li>
+            <li class="erp-item perfil producao"><i class="fas fa-hard-hat"></i>
+              <span><strong>Produção</strong>
+                <em>Cálculos, orçamentos e controle de lajes</em>
+              </span>
+              <span class="erp-badge badge-producao">PROD</span>
+            </li>
+            <li class="erp-item perfil comercial"><i class="fas fa-handshake"></i>
+              <span><strong>Comercial</strong>
+                <em>Clientes, pedidos e geração de propostas</em>
+              </span>
+              <span class="erp-badge badge-comercial">COM</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Status -->
+        <div class="erp-bloco erp-status-bloco">
+          <h3 class="erp-bloco-titulo"><i class="fas fa-flask"></i> Status do Sistema</h3>
+          <div class="erp-status-grid">
+            <div class="erp-status-item"><span class="status-dot dot-ok"></span>Em desenvolvimento ativo</div>
+            <div class="erp-status-item"><span class="status-dot dot-ok"></span>Uso experimental — fábrica piloto</div>
+            <div class="erp-status-item"><span class="status-dot dot-ok"></span>Projeto expansível por módulos</div>
+            <div class="erp-status-item"><span class="status-dot dot-warn"></span>Back-end local planejado (fase 2)</div>
+            <div class="erp-status-item"><span class="status-dot dot-warn"></span>Comercialização futura planejada</div>
           </div>
-          <div class="resumo-tag tag-custo">
-            <span class="resumo-label">Custo Fábrica</span>
-            <h3 id="custoProducao" class="resumo-value">R$ 0,00</h3>
-          </div>
-          <div class="resumo-tag tag-vendas">
-            <span class="resumo-label">Venda (c/ Margem)</span>
-            <h3 id="custoVenda" class="resumo-value">R$ 0,00</h3>
+          <div class="erp-versao">
+            <i class="fas fa-code-branch"></i> Versão atual: <strong>1.2-alpha</strong> — Motor de Orçamentos
           </div>
         </div>
 
-        <div class="resumo-total-container">
-          <div class="resumo-tag tag-total-cliente">
-            <span class="resumo-label">TOTAL FINAL (C/ FRETE)</span>
-            <h2 id="precoFinal" class="resumo-value">R$ 0.000,00</h2>
-          </div>
-        </div>
+      </div>
 
-        <div class="detalhes-engenharia">
-          <h3>DETALHES TÉCNICOS</h3>
-          <div class="grid-engenharia">
-            <div class="eng-item">
-              <span class="eng-label">Enchimento</span>
-              <span id="consumoEnchimento" class="eng-value">0 un</span>
-            </div>
-            <div class="eng-item">
-              <span class="eng-label">Concreto (m³)</span>
-              <span id="volumeConcreto" class="eng-value">0.00 m³</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="acoes-finais">
-          <button class="btn-imprimir" onclick="gerarPDF()">IMPRIMIR PDF</button>
-        </div>
+      <div class="erp-footer-modal">
+        <button type="button" class="btn-login erp-btn-acessar" id="btn-erp-ir-login">
+          <i class="fas fa-sign-in-alt"></i> Acessar o Sistema
+        </button>
       </div>
     </div>
+  </div>
+
+  <!-- ========== TELA DO SISTEMA ========== -->
+  <main id="tela-sistema" class="tela-sistema oculto">
+
+    <!-- Header -->
+    <header class="sistema-header">
+      <div class="sistema-header-esq">
+        <div class="logo-icon-sm"><i class="fas fa-industry"></i></div>
+        <div>
+          <h1 class="sistema-titulo">SISTEMA DE ORÇAMENTO DE LAJES</h1>
+          <span class="sistema-subtitulo">Fábrica — Betim, MG</span>
+        </div>
+      </div>
+      <div class="sistema-header-dir">
+        <span class="badge-usuario">
+          <i class="fas fa-user-circle"></i>
+          <span id="nome-usuario-logado">Usuário</span>
+          <span id="badge-perfil-usuario" class="erp-badge" style="margin-left:6px"></span>
+        </span>
+        <button type="button" class="btn-logout" id="btn-logout" title="Sair do sistema">
+          <i class="fas fa-sign-out-alt"></i> Sair
+        </button>
+      </div>
+    </header>
+
+    <!-- Conteúdo principal -->
+    <div class="sistema-body">
+
+      <!-- Card de Cálculo -->
+      <section class="calc-card" aria-labelledby="titulo-calculo">
+        <div class="calc-card-header">
+          <div class="calc-card-titulo-wrapper">
+            <i class="fas fa-ruler-combined" aria-hidden="true"></i>
+            <h2 id="titulo-calculo">CÁLCULO E ORÇAMENTO DO VÃO</h2>
+          </div>
+          <span class="calc-card-badge">Motor v1.2</span>
+        </div>
+
+        <div class="calc-form">
+
+          <!-- Bloco Financeiro -->
+          <fieldset class="bloco-config">
+            <legend><i class="fas fa-cog"></i> Configurações Financeiras</legend>
+            <div class="config-grid">
+              <div class="campo-config">
+                <label for="precoM2">Custo de Produção</label>
+                <div class="input-unidade">
+                  <span class="unidade-prefix">R$</span>
+                  <input type="number" id="precoM2" value="15.00" min="0" step="0.01" placeholder="0,00">
+                  <span class="unidade-suffix">/m²</span>
+                </div>
+              </div>
+              <div class="campo-config">
+                <label for="freteKM">Frete Total</label>
+                <div class="input-unidade">
+                  <span class="unidade-prefix">R$</span>
+                  <input type="number" id="freteKM" value="0.00" min="0" step="0.01" placeholder="0,00">
+                </div>
+              </div>
+              <div class="campo-config">
+                <label for="margemLucro">Margem de Lucro</label>
+                <div class="input-unidade">
+                  <input type="number" id="margemLucro" value="20" min="0" max="100" step="1" placeholder="0">
+                  <span class="unidade-suffix">%</span>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- Controles de Tipo -->
+          <fieldset class="bloco-config">
+            <legend><i class="fas fa-sliders-h"></i> Configurações Técnicas</legend>
+            <div class="controles-grid">
+
+              <div class="controle-grupo">
+                <label>Tipo de Laje</label>
+                <div class="segmented" role="group" aria-label="Tipo de laje">
+                  <button type="button" class="seg-btn ativo" data-tipo-laje="H8" id="btn-h8">
+                    H8
+                  </button>
+                  <button type="button" class="seg-btn" data-tipo-laje="H12" id="btn-h12">
+                    H12
+                  </button>
+                </div>
+              </div>
+
+              <div class="controle-grupo">
+                <label>Formato da Área</label>
+                <div class="segmented" role="group" aria-label="Formato da área">
+                  <button type="button" class="seg-btn ativo" data-formato="regular" id="btn-regular">
+                    <i class="fas fa-square"></i> Regular (90°)
+                  </button>
+                  <button type="button" class="seg-btn" data-formato="irregular" id="btn-irregular">
+                    <i class="fas fa-draw-polygon"></i> Irregular
+                  </button>
+                </div>
+              </div>
+
+              <div class="controle-grupo">
+                <label>Tipo de Enchimento</label>
+                <div class="segmented" role="group" aria-label="Tipo de enchimento">
+                  <button type="button" class="seg-btn ativo" data-enchimento="eps" id="btn-eps">
+                    <i class="fas fa-cube"></i> EPS (Isopor)
+                  </button>
+                  <button type="button" class="seg-btn" data-enchimento="ceramica" id="btn-ceramica">
+                    <i class="fas fa-th"></i> Cerâmica
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </fieldset>
+
+          <!-- Campos de Medida -->
+          <fieldset class="bloco-config">
+            <legend><i class="fas fa-ruler"></i> Dimensões do Vão</legend>
+
+            <!-- Regular -->
+            <div id="campos-regular" class="dimensoes-grid">
+              <div class="campo-config">
+                <label for="larguraVao">Largura</label>
+                <div class="input-unidade">
+                  <input type="number" id="larguraVao" min="0" step="0.01" placeholder="0,00">
+                  <span class="unidade-suffix">m</span>
+                </div>
+              </div>
+              <div class="campo-config">
+                <label for="comprimentoVao">Comprimento</label>
+                <div class="input-unidade">
+                  <input type="number" id="comprimentoVao" min="0" step="0.01" placeholder="0,00">
+                  <span class="unidade-suffix">m</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Irregular -->
+            <div id="campos-irregular" class="dimensoes-grid oculto">
+              <p class="nota-irregular">
+                <i class="fas fa-info-circle"></i>
+                Laje fora do esquadro — informe as 4 paredes separadamente.
+              </p>
+              <div class="campo-config">
+                <label for="larguraFrente">Frente</label>
+                <div class="input-unidade">
+                  <input type="number" id="larguraFrente" min="0" step="0.01" placeholder="0,00">
+                  <span class="unidade-suffix">m</span>
+                </div>
+              </div>
+              <div class="campo-config">
+                <label for="larguraFundo">Fundo</label>
+                <div class="input-unidade">
+                  <input type="number" id="larguraFundo" min="0" step="0.01" placeholder="0,00">
+                  <span class="unidade-suffix">m</span>
+                </div>
+              </div>
+              <div class="campo-config">
+                <label for="compEsq">Lado Esquerdo</label>
+                <div class="input-unidade">
+                  <input type="number" id="compEsq" min="0" step="0.01" placeholder="0,00">
+                  <span class="unidade-suffix">m</span>
+                </div>
+              </div>
+              <div class="campo-config">
+                <label for="compDir">Lado Direito</label>
+                <div class="input-unidade">
+                  <input type="number" id="compDir" min="0" step="0.01" placeholder="0,00">
+                  <span class="unidade-suffix">m</span>
+                </div>
+              </div>
+            </div>
+
+            <div id="alerta-campos" class="alerta-campos oculto" role="alert">
+              <i class="fas fa-exclamation-triangle"></i>
+              <span id="msg-alerta-campos">Preencha todos os campos obrigatórios.</span>
+            </div>
+          </fieldset>
+
+          <!-- Campo do cliente (opcional) -->
+          <fieldset class="bloco-config">
+            <legend><i class="fas fa-user"></i> Dados do Cliente (Opcional)</legend>
+            <div class="config-grid">
+              <div class="campo-config" style="grid-column: 1 / -1">
+                <label for="nomeCliente">Nome do Cliente / Obra</label>
+                <div class="input-unidade">
+                  <i class="fas fa-hard-hat unidade-prefix" style="font-size: 0.85rem;"></i>
+                  <input type="text" id="nomeCliente" placeholder="Ex: João Silva — Obra Rua das Flores">
+                </div>
+              </div>
+            </div>
+          </fieldset>
+
+          <div class="calc-acoes">
+            <button type="button" class="btn-calcular" id="btn-calcular">
+              <i class="fas fa-calculator"></i> CALCULAR ORÇAMENTO
+            </button>
+            <button type="button" class="btn-limpar" id="btn-limpar">
+              <i class="fas fa-trash-alt"></i> Limpar
+            </button>
+          </div>
+
+        </div><!-- /calc-form -->
+
+        <!-- Resultados -->
+        <div id="resultados" class="resultados oculto" aria-live="polite">
+
+          <div class="resultados-header">
+            <h3><i class="fas fa-chart-bar"></i> RESULTADO DO ORÇAMENTO</h3>
+            <span id="data-orcamento" class="data-orcamento"></span>
+          </div>
+
+          <div id="cliente-resultado" class="cliente-resultado oculto">
+            <i class="fas fa-hard-hat"></i>
+            <span id="cliente-resultado-nome"></span>
+          </div>
+
+          <!-- Cards de resultado -->
+          <div class="resultado-grid">
+            <div class="res-card res-area">
+              <div class="res-icon"><i class="fas fa-vector-square"></i></div>
+              <span class="res-label">Área Total</span>
+              <strong id="res-area" class="res-valor">0,00 m²</strong>
+            </div>
+            <div class="res-card res-custo">
+              <div class="res-icon"><i class="fas fa-industry"></i></div>
+              <span class="res-label">Custo Fábrica</span>
+              <strong id="res-custo-producao" class="res-valor">R$ 0,00</strong>
+            </div>
+            <div class="res-card res-venda">
+              <div class="res-icon"><i class="fas fa-tag"></i></div>
+              <span class="res-label">Preço de Venda</span>
+              <strong id="res-custo-venda" class="res-valor">R$ 0,00</strong>
+            </div>
+          </div>
+
+          <div class="resultado-total">
+            <div class="total-info">
+              <span class="total-label">TOTAL FINAL (C/ FRETE)</span>
+              <span class="total-subinfo" id="total-subinfo">0,00 m² × R$ 0,00/m² + R$ 0,00 frete</span>
+            </div>
+            <strong id="res-preco-final" class="total-valor">R$ 0,00</strong>
+          </div>
+
+          <!-- Detalhes técnicos -->
+          <div class="detalhes-tecnicos">
+            <h4><i class="fas fa-drafting-compass"></i> DETALHES TÉCNICOS</h4>
+            <div class="det-grid">
+              <div class="det-item">
+                <i class="fas fa-layer-group"></i>
+                <span class="det-label">Tipo de Laje</span>
+                <span id="det-tipo-laje" class="det-valor">—</span>
+              </div>
+              <div class="det-item">
+                <i class="fas fa-cube"></i>
+                <span class="det-label">Enchimento</span>
+                <span id="det-enchimento" class="det-valor">—</span>
+              </div>
+              <div class="det-item">
+                <i class="fas fa-boxes"></i>
+                <span class="det-label">Qtd. Enchimento</span>
+                <span id="det-qtd-enchimento" class="det-valor">0 un</span>
+              </div>
+              <div class="det-item">
+                <i class="fas fa-fill-drip"></i>
+                <span class="det-label">Volume Concreto</span>
+                <span id="det-concreto" class="det-valor">0,00 m³</span>
+              </div>
+              <div class="det-item">
+                <i class="fas fa-ruler-combined"></i>
+                <span class="det-label">Formato</span>
+                <span id="det-formato" class="det-valor">—</span>
+              </div>
+              <div class="det-item">
+                <i class="fas fa-dollar-sign"></i>
+                <span class="det-label">Preço / m²</span>
+                <span id="det-preco-m2" class="det-valor">—</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="resultado-acoes">
+            <button type="button" class="btn-pdf" id="btn-pdf">
+              <i class="fas fa-file-pdf"></i> Gerar PDF
+            </button>
+            <button type="button" class="btn-novo" id="btn-novo-calculo">
+              <i class="fas fa-plus"></i> Novo Cálculo
+            </button>
+          </div>
+
+        </div><!-- /resultados -->
+      </section>
+
+    </div><!-- /sistema-body -->
+
+    <footer class="sistema-footer">
+      <span>Sistema de Orçamento de Lajes v1.2 — Uso Interno</span>
+      <span>Fábrica de Lajes — Betim, MG</span>
+    </footer>
+
+  </main>
+
+    <footer class="sistema-footer">
+      <span>Sistema de Orçamento de Lajes v1.2 — Uso Interno</span>
+      <span>Fábrica de Lajes — Betim, MG</span>
+    </footer>
+
   </main>
 
   <script src="js/calculo.js"></script>
 </body>
-
 </html>

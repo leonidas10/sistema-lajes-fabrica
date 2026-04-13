@@ -1,10 +1,12 @@
 /**
  * SISTEMA DE ORÇAMENTO DE LAJES — calculo.js
- * Versão: 1.2
+ * Versão: 1.4.0
  * Uso: Sistema interno de fábrica (local)
  */
 
 'use strict';
+
+const VERSAO_SISTEMA = '1.4.0';
 
 /* ============================================================
    CONFIGURAÇÃO — CREDENCIAIS LOCAIS
@@ -23,6 +25,7 @@ const TECH = {
   CERAMICA_POR_M2: 8.33,
   CONCRETO_H8: 0.042,
   CONCRETO_H12: 0.058,
+  ESPACAMENTO_TRELICA: 0.40,
 };
 
 /* ============================================================
@@ -42,21 +45,43 @@ const estado = {
    UTILITÁRIOS
    ============================================================ */
 function formatarMoeda(valor) {
-  return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  const numero = Number(valor) || 0;
+  return numero.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 
+
 function formatarNumero(valor, decimais = 2) {
-  return valor.toLocaleString('pt-BR', {
+  const numero = Number(valor) || 0;
+  return numero.toLocaleString('pt-BR', {
     minimumFractionDigits: decimais,
     maximumFractionDigits: decimais,
   });
 }
 
+
+function atualizarVersaoSistema() {
+  setTexto('versao-hero', `Sistema Interno v${VERSAO_SISTEMA}`);
+  setTexto('versao-menu', `Versão ${VERSAO_SISTEMA} — lajes treliçadas H8 e H12.`);
+  setTexto('versao-modulo-ativo', `Ativo — Motor v${VERSAO_SISTEMA}`);
+
+  const versaoErp = document.getElementById('versao-erp');
+  if (versaoErp) {
+    versaoErp.innerHTML = `<i class="fas fa-code-branch"></i> Versão atual: <strong>${VERSAO_SISTEMA}</strong> — Motor de Orçamentos`;
+  }
+
+  setTexto('versao-card', `Motor v${VERSAO_SISTEMA}`);
+  setTexto('versao-footer', `Sistema de Orçamento de Lajes v${VERSAO_SISTEMA} — Uso Interno`);
+}
+
 function lerNumero(id) {
   const el = document.getElementById(id);
   if (!el) return NaN;
-  const v = parseFloat(el.value);
-  return isNaN(v) ? NaN : v;
+
+  const texto = String(el.value).replace(',', '.').trim();
+  if (texto === '') return NaN;
+
+  const v = parseFloat(texto);
+  return Number.isNaN(v) ? NaN : v;
 }
 
 function mostrar(id) {
@@ -70,6 +95,11 @@ function ocultar(id) {
 function setTexto(id, texto) {
   const el = document.getElementById(id);
   if (el) el.textContent = texto;
+}
+
+function setValor(id, valor) {
+  const el = document.getElementById(id);
+  if (el) el.value = valor;
 }
 
 function dataAtual() {
@@ -96,6 +126,18 @@ function carregarImagemComoBase64(caminho) {
       reader.onerror = reject;
       reader.readAsDataURL(blob);
     }));
+}
+
+function limparCamposTrelica() {
+  setValor('quantidadeTrelicas', '0');
+  setValor('comprimentoTrelica', '0,00');
+  setValor('totalMetrosTrelica', '0,00');
+}
+
+function atualizarCamposTrelica(quantidadeTrelicas, comprimentoCadaTrelica, metrosLinearesTrelica) {
+  setValor('quantidadeTrelicas', String(quantidadeTrelicas));
+  setValor('comprimentoTrelica', formatarNumero(comprimentoCadaTrelica));
+  setValor('totalMetrosTrelica', formatarNumero(metrosLinearesTrelica));
 }
 
 /* ============================================================
@@ -316,6 +358,7 @@ function alternarCamposDimensao() {
     mostrar('campos-irregular');
   }
   ocultar('alerta-campos');
+  limparCamposTrelica();
 }
 
 /* ============================================================
@@ -329,6 +372,7 @@ function calcularOrcamento() {
   const margem = lerNumero('margemLucro');
   const precoEPS = lerNumero('precoEPS');
   const precoCeramica = lerNumero('precoCeramica');
+  const valorMetroTrelica = lerNumero('valorMetroTrelica');
 
   if (isNaN(precoM2) || precoM2 <= 0) {
     mostrarAlertaCampos('O custo de produção por m² deve ser maior que zero.');
@@ -355,18 +399,27 @@ function calcularOrcamento() {
     return;
   }
 
+  if (isNaN(valorMetroTrelica) || valorMetroTrelica < 0) {
+    mostrarAlertaCampos('Informe um valor válido para o metro linear da treliça.');
+    return;
+  }
+
   let area = 0;
   let formatoTexto = '';
+  let larguraBase = 0;
+  let comprimentoBase = 0;
 
   if (estado.formato === 'regular') {
     const largura = lerNumero('larguraVao');
     const comprimento = lerNumero('comprimentoVao');
 
     if (isNaN(largura) || largura <= 0 || isNaN(comprimento) || comprimento <= 0) {
-      mostrarAlertaCampos('Informe a largura e o comprimento do vão (valores positivos).');
+      mostrarAlertaCampos('Informe a largura e o comprimento do vão.');
       return;
     }
 
+    larguraBase = largura;
+    comprimentoBase = comprimento;
     area = largura * comprimento;
     formatoTexto = `Regular ${formatarNumero(largura)} × ${formatarNumero(comprimento)} m`;
   } else {
@@ -376,13 +429,14 @@ function calcularOrcamento() {
     const ladoDir = lerNumero('compDir');
 
     if ([frente, fundo, ladoEsq, ladoDir].some((v) => isNaN(v) || v <= 0)) {
-      mostrarAlertaCampos('Informe todos os 4 lados do vão irregular (valores positivos).');
+      mostrarAlertaCampos('Informe todos os lados do vão irregular.');
       return;
     }
 
-    const mediaLargura = (frente + fundo) / 2;
-    const mediaComprimento = (ladoEsq + ladoDir) / 2;
-    area = mediaLargura * mediaComprimento;
+    larguraBase = (frente + fundo) / 2;
+    comprimentoBase = (ladoEsq + ladoDir) / 2;
+    area = larguraBase * comprimentoBase;
+
     formatoTexto =
       `Irregular — Frente: ${formatarNumero(frente)}m, ` +
       `Fundo: ${formatarNumero(fundo)}m, ` +
@@ -402,13 +456,32 @@ function calcularOrcamento() {
 
   const custoEnchimento = qtdEnchimento * precoUnitarioEnchimento;
 
-  const custoFabrica = (area * precoM2) + custoEnchimento;
+  const quantidadeTrelicas = Math.ceil(larguraBase / TECH.ESPACAMENTO_TRELICA);
+  const comprimentoCadaTrelica = comprimentoBase;
+  const metrosLinearesTrelica = quantidadeTrelicas * comprimentoCadaTrelica;
+  const custoTrelica = metrosLinearesTrelica * valorMetroTrelica;
+
+  atualizarCamposTrelica(
+    quantidadeTrelicas,
+    comprimentoCadaTrelica,
+    metrosLinearesTrelica
+  );
+
+  const custoFabrica = (area * precoM2) + custoEnchimento + custoTrelica;
   const precoVenda = custoFabrica * (1 + margem / 100);
   const precoFinal = precoVenda + frete;
   const precoM2Venda = area > 0 ? precoFinal / area : 0;
 
-  const volumeConcreto = area * (estado.tipoLaje === 'H8' ? TECH.CONCRETO_H8 : TECH.CONCRETO_H12);
-  const enchimentoTexto = estado.enchimento === 'eps' ? 'EPS (Isopor)' : 'Cerâmica';
+  const volumeConcreto = area * (
+    estado.tipoLaje === 'H8'
+      ? TECH.CONCRETO_H8
+      : TECH.CONCRETO_H12
+  );
+
+  const enchimentoTexto = estado.enchimento === 'eps'
+    ? 'EPS (Isopor)'
+    : 'Cerâmica';
+
   const nomeCliente = document.getElementById('nomeCliente')?.value.trim() || '';
 
   estado.ultimoCalculo = {
@@ -423,6 +496,11 @@ function calcularOrcamento() {
     qtdEnchimento,
     custoEnchimento,
     precoUnitarioEnchimento,
+    valorMetroTrelica,
+    quantidadeTrelicas,
+    comprimentoCadaTrelica,
+    metrosLinearesTrelica,
+    custoTrelica,
     volumeConcreto,
     enchimentoTexto,
     formatoTexto,
@@ -460,6 +538,8 @@ function exibirResultados(c) {
   setTexto('det-enchimento', c.enchimentoTexto);
   setTexto('det-qtd-enchimento', `${c.qtdEnchimento} un`);
   setTexto('det-concreto', `${formatarNumero(c.volumeConcreto, 3)} m³`);
+  setTexto('det-metros-trelica', `${formatarNumero(c.metrosLinearesTrelica)} m`);
+  setTexto('det-custo-trelica', formatarMoeda(c.custoTrelica));
   setTexto('det-formato', c.formatoTexto.split('—')[0].trim());
   setTexto('det-preco-m2', `${formatarMoeda(c.precoM2Venda)}/m²`);
 
@@ -493,6 +573,9 @@ function limparFormulario() {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
+
+  setValor('valorMetroTrelica', '0.00');
+  limparCamposTrelica();
 
   ocultar('resultados');
   ocultar('alerta-campos');
@@ -620,38 +703,32 @@ async function gerarPDF() {
           RESUMO FINANCEIRO
         </div>
 
-        <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
-          <tr>
-            <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb;">Área Total</td>
-            <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb; text-align: right; font-weight: 600;">
-              ${formatarNumero(c.area)} m²
+          <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+            <tr>
+              <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb;">Área Total</td>
+              <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb; text-align: right; font-weight: 600;">
+                ${formatarNumero(c.area)} m²
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb;">Preço de Venda</td>
+              <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb; text-align: right; font-weight: 600;">
+                ${formatarMoeda(c.precoVenda)}
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb;">Frete</td>
+              <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb; text-align: right; font-weight: 600;">
+                ${formatarMoeda(c.frete)}
+              </td>
+            </tr>
+            <tr style="background: #fff7ed;">
+              <td style="padding: 12px; font-size: 15px; font-weight: bold; color: #9a3412;">TOTAL FINAL</td>
+              <td style="padding: 12px; text-align: right; font-size: 17px; font-weight: bold; color: #ea580c;">
+                ${formatarMoeda(c.precoFinal)}
             </td>
           </tr>
-          <tr>
-            <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb;">Custo de Produção</td>
-            <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb; text-align: right; font-weight: 600;">
-              ${formatarMoeda(c.custoFabrica)}
-            </td>
-          </tr>
-          <tr>
-            <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb;">Preço de Venda</td>
-            <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb; text-align: right; font-weight: 600;">
-              ${formatarMoeda(c.precoVenda)}
-            </td>
-          </tr>
-          <tr>
-            <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb;">Frete</td>
-            <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb; text-align: right; font-weight: 600;">
-              ${formatarMoeda(c.frete)}
-            </td>
-          </tr>
-          <tr style="background: #fff7ed;">
-            <td style="padding: 12px; font-size: 15px; font-weight: bold; color: #9a3412;">TOTAL FINAL</td>
-            <td style="padding: 12px; text-align: right; font-size: 17px; font-weight: bold; color: #ea580c;">
-              ${formatarMoeda(c.precoFinal)}
-            </td>
-          </tr>
-        </table>
+            </table>
       </div>
 
       <div style="
@@ -694,6 +771,30 @@ async function gerarPDF() {
             <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb;">Qtd. Enchimento</td>
             <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb; text-align: right; font-weight: 600;">
               ${c.qtdEnchimento} unidades
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb;">Qtd. Treliças</td>
+            <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb; text-align: right; font-weight: 600;">
+              ${c.quantidadeTrelicas} unidades
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb;">Comprimento de Cada Treliça</td>
+            <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb; text-align: right; font-weight: 600;">
+              ${formatarNumero(c.comprimentoCadaTrelica)} m
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb;">Total Metros Lineares</td>
+            <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb; text-align: right; font-weight: 600;">
+              ${formatarNumero(c.metrosLinearesTrelica)} m
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb;">Custo da Treliça</td>
+            <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb; text-align: right; font-weight: 600;">
+              ${formatarMoeda(c.custoTrelica)}
             </td>
           </tr>
           <tr>
@@ -869,9 +970,26 @@ function inicializarLogoEmpresa() {
    INICIALIZAÇÃO
    ============================================================ */
 document.addEventListener('DOMContentLoaded', () => {
+
+  atualizarVersaoSistema(); // 👈 AQUI
+
+ 
+  document.addEventListener('click', (e) => {
+  if (window.innerWidth > 768) return;
+
+  const clicouDentroDoMenu = e.target.closest('.nav-links');
+  const clicouNoBotaoMenu = e.target.closest('#menu-toggle');
+
+  if (!clicouDentroDoMenu && !clicouNoBotaoMenu) {
+    document.querySelectorAll('.dropdown').forEach((item) => {
+      item.classList.remove('open');
+    });
+  }
+});
   inicializarLogin();
   inicializarControles();
   inicializarLogoEmpresa();
+  limparCamposTrelica();
 
   document.getElementById('btn-calcular')
     ?.addEventListener('click', calcularOrcamento);
@@ -891,18 +1009,50 @@ document.addEventListener('DOMContentLoaded', () => {
   const menuToggle = document.getElementById('menu-toggle');
   const navLinks = document.querySelector('.nav-links');
 
-  menuToggle?.addEventListener('click', () => {
-    navLinks?.classList.toggle('active');
-  });
+menuToggle?.addEventListener('click', () => {
+  navLinks?.classList.toggle('active');
 
-  document.querySelectorAll('.dropbtn').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const dropdown = btn.parentElement;
-      dropdown?.classList.toggle('open');
+  const menuAberto = navLinks?.classList.contains('active');
+
+  if (!menuAberto) {
+    document.querySelectorAll('.dropdown').forEach((item) => {
+      item.classList.remove('open');
     });
-  });
+  }
+});
 
-  ['larguraVao', 'comprimentoVao', 'larguraFrente', 'larguraFundo', 'compEsq', 'compDir'].forEach((id) => {
+document.querySelectorAll('.dropbtn').forEach((btn) => {
+  btn.addEventListener('click', (e) => {
+    if (window.innerWidth > 768) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    const dropdown = btn.parentElement;
+    if (!dropdown) return;
+
+    const jaEstaAberto = dropdown.classList.contains('open');
+
+    document.querySelectorAll('.dropdown').forEach((item) => {
+      if (item !== dropdown) {
+        item.classList.remove('open');
+      }
+    });
+
+    dropdown.classList.toggle('open', !jaEstaAberto);
+    btn.blur();
+  });
+});
+
+  [
+    'larguraVao',
+    'comprimentoVao',
+    'larguraFrente',
+    'larguraFundo',
+    'compEsq',
+    'compDir',
+    'valorMetroTrelica',
+  ].forEach((id) => {
     document.getElementById(id)?.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') calcularOrcamento();
     });

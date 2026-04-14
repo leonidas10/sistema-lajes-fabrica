@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Sistema interno de orçamento de lajes treliçadas — Fábrica">
-  <title>Sistema Lajes — Login</title>
+  <title>TreliSys — Plataforma de Lajes Treliçadas</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,8 +31,8 @@
           <i class="fas fa-industry"></i>
         </div>
         <div class="logo-text">
-          <span class="logo-main">LAJES</span>
-          <span class="logo-sub">FÁBRICA</span>
+          <span class="logo-main">TreliSys</span>
+          <span class="logo-sub">PLATAFORMA DE LAJES</span>
         </div>
       </div>
 
@@ -56,7 +56,8 @@
               </li>
               <li>
                 <i class="fas fa-microchip"></i>
-                <div><strong>Motor:</strong> <span id="versao-menu">Versão 1.4.0 — lajes treliçadas H8 e H12.</span></div>
+                <div><strong>Motor:</strong> <span id="versao-menu">Versão 1.4.0 — lajes treliçadas H8 e H12.</span>
+                </div>
               </li>
             </ul>
           </div>
@@ -96,7 +97,8 @@
             <p>O sistema auxilia no controle dos processos internos:</p>
             <hr>
             <div class="servico-item"><i class="fas fa-calculator"></i> Orçamento técnico de lajes</div>
-            <div class="servico-item"><i class="fas fa-ruler-combined"></i> Cálculo de vãos regulares e irregulares</div>
+            <div class="servico-item"><i class="fas fa-ruler-combined"></i> Cálculo de vãos regulares e irregulares
+            </div>
             <div class="servico-item"><i class="fas fa-cubes"></i> Estimativa de enchimento e concreto</div>
             <div class="servico-item"><i class="fas fa-industry"></i> Composição de custo de fábrica</div>
           </div>
@@ -112,7 +114,7 @@
             <hr>
             <div class="contato-item">
               <i class="fas fa-envelope"></i>
-              <span>[email&nbsp;protected]</span>
+              <a href="mailto:leonidas.paulino@hotmail.com">leonidas.paulino@hotmail.com</a>
             </div>
             <div class="contato-item">
               <i class="fab fa-whatsapp"></i>
@@ -134,16 +136,17 @@
     <!-- Hero -->
     <div class="hero-container">
       <div class="hero-badge">
-        <i class="fas fa-shield-alt"></i> <span id="versao-hero">Sistema Interno v1.4.0</span>
+        <i class="fas fa-shield-alt"></i> <span id="versao-hero">TreliSys v1.4.0</span>
       </div>
       <h1 class="hero-titulo">
-        SISTEMA DE<br>
-        <span class="hero-destaque">ORÇAMENTO</span><br>
-        DE LAJES
+        TreliSys ERP<br>
+        <span class="hero-destaque">TreliSys</span><br>
+
       </h1>
       <p class="hero-subtitulo">
-        Plataforma de cálculo e gestão para lajes treliçadas H8 e H12.<br>
-        Precisão técnica a serviço da produção.
+        Plataforma Inteligente para Orçamento de Lajes Treliçadas com precisão, velocidade e controle total da produção.
+        <br>
+
       </p>
       <button type="button" class="hero-btn" id="btn-visao-geral">
         <i class="fas fa-th-large"></i> Visão Geral do ERP
@@ -168,14 +171,8 @@
             <label for="usuario-login">Usuário</label>
             <div class="input-wrapper">
               <i class="fas fa-user input-icon" aria-hidden="true"></i>
-              <input
-                type="text"
-                id="usuario-login"
-                name="usuario"
-                placeholder="Digite seu usuário"
-                autocomplete="username"
-                required
-              >
+              <input type="text" id="usuario-login" name="usuario" placeholder="Digite seu usuário"
+                autocomplete="username" required>
             </div>
             <span class="campo-erro" id="erro-usuario" role="alert"></span>
           </div>
@@ -184,14 +181,8 @@
             <label for="senha-login">Senha</label>
             <div class="input-wrapper">
               <i class="fas fa-lock input-icon" aria-hidden="true"></i>
-              <input
-                type="password"
-                id="senha-login"
-                name="senha"
-                placeholder="••••••••"
-                autocomplete="current-password"
-                required
-              >
+              <input type="password" id="senha-login" name="senha" placeholder="••••••••"
+                autocomplete="current-password" required>
               <button type="button" class="btn-toggle-senha" id="toggle-senha" aria-label="Mostrar senha">
                 <i class="fas fa-eye"></i>
               </button>
@@ -236,21 +227,30 @@
         <div class="erp-bloco">
           <h3 class="erp-bloco-titulo"><i class="fas fa-boxes"></i> Módulos Planejados</h3>
           <ul class="erp-lista">
-            <li class="erp-item ativo"><i class="fas fa-check-circle"></i><span><strong>Orçamentos de Lajes</strong><em id="versao-modulo-ativo">Ativo — Motor v1.4.0</em></span></li>
-            <li class="erp-item futuro"><i class="fas fa-clock"></i><span><strong>Cadastro de Clientes</strong><em>Em desenvolvimento</em></span></li>
-            <li class="erp-item futuro"><i class="fas fa-clock"></i><span><strong>Controle de Produção</strong><em>Planejado</em></span></li>
-            <li class="erp-item futuro"><i class="fas fa-clock"></i><span><strong>Gestão de Materiais</strong><em>Planejado</em></span></li>
-            <li class="erp-item futuro"><i class="fas fa-clock"></i><span><strong>Relatórios</strong><em>Planejado</em></span></li>
+            <li class="erp-item ativo"><i class="fas fa-check-circle"></i><span><strong>Orçamentos de Lajes</strong><em
+                  id="versao-modulo-ativo">Ativo — Motor v1.4.0</em></span></li>
+            <li class="erp-item futuro"><i class="fas fa-clock"></i><span><strong>Cadastro de Clientes</strong><em>Em
+                  desenvolvimento</em></span></li>
+            <li class="erp-item futuro"><i class="fas fa-clock"></i><span><strong>Controle de
+                  Produção</strong><em>Planejado</em></span></li>
+            <li class="erp-item futuro"><i class="fas fa-clock"></i><span><strong>Gestão de
+                  Materiais</strong><em>Planejado</em></span></li>
+            <li class="erp-item futuro"><i
+                class="fas fa-clock"></i><span><strong>Relatórios</strong><em>Planejado</em></span></li>
           </ul>
         </div>
 
         <div class="erp-bloco">
           <h3 class="erp-bloco-titulo"><i class="fas fa-microchip"></i> Tecnologias Utilizadas</h3>
           <ul class="erp-lista">
-            <li class="erp-item tech"><i class="fab fa-html5"></i><span><strong>HTML5 / CSS3 / JS</strong><em>Frontend puro, sem framework</em></span></li>
-            <li class="erp-item tech"><i class="fas fa-database"></i><span><strong>localStorage (fase 1)</strong><em>Dados locais no navegador</em></span></li>
-            <li class="erp-item tech"><i class="fas fa-server"></i><span><strong>Node.js + SQLite (fase 2)</strong><em>Back-end local planejado</em></span></li>
-            <li class="erp-item tech"><i class="fas fa-desktop"></i><span><strong>Execução local</strong><em>Sem necessidade de internet</em></span></li>
+            <li class="erp-item tech"><i class="fab fa-html5"></i><span><strong>HTML5 / CSS3 / JS</strong><em>Frontend
+                  puro, sem framework</em></span></li>
+            <li class="erp-item tech"><i class="fas fa-database"></i><span><strong>localStorage (fase
+                  1)</strong><em>Dados locais no navegador</em></span></li>
+            <li class="erp-item tech"><i class="fas fa-server"></i><span><strong>Node.js + SQLite (fase
+                  2)</strong><em>Back-end local planejado</em></span></li>
+            <li class="erp-item tech"><i class="fas fa-desktop"></i><span><strong>Execução local</strong><em>Sem
+                  necessidade de internet</em></span></li>
           </ul>
         </div>
 
@@ -281,11 +281,12 @@
             <div class="erp-status-item"><span class="status-dot dot-ok"></span>Em desenvolvimento ativo</div>
             <div class="erp-status-item"><span class="status-dot dot-ok"></span>Uso experimental — fábrica piloto</div>
             <div class="erp-status-item"><span class="status-dot dot-ok"></span>Projeto expansível por módulos</div>
-            <div class="erp-status-item"><span class="status-dot dot-warn"></span>Back-end local planejado (fase 2)</div>
+            <div class="erp-status-item"><span class="status-dot dot-warn"></span>Back-end local planejado (fase 2)
+            </div>
             <div class="erp-status-item"><span class="status-dot dot-warn"></span>Comercialização futura planejada</div>
           </div>
-          <div class="erp-versao">
-            <i class="fas fa-code-branch"></i> Versão atual: <strong>1.4.0</strong> — Motor de Orçamentos
+          <div class="erp-versao" id="versao-erp">
+            <i class="fas fa-code-branch"></i> Versão atual: <strong>1.4.1</strong> — Motor de Orçamentos
           </div>
         </div>
       </div>
@@ -305,8 +306,8 @@
       <div class="sistema-header-esq">
         <div class="logo-icon-sm"><i class="fas fa-industry"></i></div>
         <div>
-          <h1 class="sistema-titulo">SISTEMA DE ORÇAMENTO DE LAJES</h1>
-          <span class="sistema-subtitulo">Fábrica — Betim, MG</span>
+          <h1 class="sistema-titulo">Plataforma Inteligente para Lajes Treliçadas</h1>
+          <span class="sistema-subtitulo">Fábrica — MG</span>
         </div>
       </div>
 
@@ -345,22 +346,23 @@
                 <label for="precoEPS">Preço EPS (Isopor)</label>
                 <div class="input-unidade">
                   <span class="unidade-prefix">R$</span>
-                  <input type="number" id="precoEPS" name="precoEPS" value="3.50" min="0" step="0.01" placeholder="0,00">
+                  <input type="number" id="precoEPS" name="precoEPS" value="3.50" min="0" step="any" placeholder="0,00">
                   <span class="unidade-suffix">/un</span>
                 </div>
               </div>
 
               <div class="campo-config">
-                <label for="precoCeramica">Preço Lajota (Cerâmica)</label>
+                <label for="precoCeramica">Preço lajota (cer.)</label>
                 <div class="input-unidade">
                   <span class="unidade-prefix">R$</span>
-                  <input type="number" id="precoCeramica" name="precoCeramica" value="2.80" min="0" step="0.01" placeholder="0,00">
+                  <input type="number" id="precoCeramica" name="precoCeramica" value="2.80" min="0" step="0.01"
+                    placeholder="0,00">
                   <span class="unidade-suffix">/un</span>
                 </div>
               </div>
 
               <div class="campo-config">
-                <label for="precoM2">Custo Base de Produção</label>
+                <label for="precoM2">Custo de Produção</label>
                 <div class="input-unidade">
                   <span class="unidade-prefix">R$</span>
                   <input type="number" id="precoM2" name="precoM2" value="15.00" min="0" step="0.01" placeholder="0,00">
@@ -379,7 +381,8 @@
               <div class="campo-config">
                 <label for="margemLucro">Margem de Lucro</label>
                 <div class="input-unidade">
-                  <input type="number" id="margemLucro" name="margemLucro" value="20" min="0" max="100" step="1" placeholder="0">
+                  <input type="number" id="margemLucro" name="margemLucro" value="20" min="0" max="100" step="1"
+                    placeholder="0">
                   <span class="unidade-suffix">%</span>
                 </div>
               </div>
@@ -395,15 +398,8 @@
                 <label for="valorMetroTrelica">Valor do Metro Linear da Treliça</label>
                 <div class="input-unidade">
                   <span class="unidade-prefix">R$</span>
-                  <input
-                    type="number"
-                    id="valorMetroTrelica"
-                    name="valorMetroTrelica"
-                    value="0.00"
-                    min="0"
-                    step="0.01"
-                    placeholder="0,00"
-                  >
+                  <input type="number" id="valorMetroTrelica" name="valorMetroTrelica" value="0.00" min="0" step="0.01"
+                    placeholder="0,00">
                   <span class="unidade-suffix">/m</span>
                 </div>
               </div>
@@ -413,6 +409,95 @@
             <input type="hidden" id="quantidadeTrelicas" value="0">
             <input type="hidden" id="comprimentoTrelica" value="0">
             <input type="hidden" id="totalMetrosTrelica" value="0">
+          </fieldset>
+
+          <!-- Configurações de Material (EPS) -->
+          <fieldset class="bloco-config" id="bloco-material-eps">
+            <legend><i class="fas fa-cubes"></i> Configurações de Material (EPS)</legend>
+
+            <div class="config-grid">
+
+              <div class="campo-config">
+                <label for="marcaEPS">Marca / Fabricante</label>
+                <div class="input-unidade">
+                  <select id="marcaEPS" name="marcaEPS">
+                    <option value="isoplast">Isoplast</option>
+                    <option value="globo_eps">Globo EPS</option>
+                    <option value="isofort">Grupo Isofort</option>
+                    <option value="isorecort">Isorecort</option>
+                    <option value="moreiraiso">Moreiraiso</option>
+                    <option value="personalizado">Personalizado</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="campo-config">
+                <label for="comprimentoEPS">Comprimento da Peça</label>
+                <div class="input-unidade">
+                  <input type="number" id="comprimentoEPS" name="comprimentoEPS" value="1.00" min="0" step="0.01"
+                    placeholder="0,00">
+                  <span class="unidade-suffix">m</span>
+                </div>
+              </div>
+
+              <div class="campo-config">
+                <label for="larguraEPS">Largura da Peça</label>
+                <div class="input-unidade">
+                  <input type="number" id="larguraEPS" name="larguraEPS" value="0.40" min="0" step="0.01"
+                    placeholder="0,00">
+                  <span class="unidade-suffix">m</span>
+                </div>
+              </div>
+
+              <div class="campo-config">
+                <label for="alturaEPS">Altura da Peça</label>
+                <div class="input-unidade">
+                  <input type="number" id="alturaEPS" name="alturaEPS" value="0.08" min="0" step="0.01"
+                    placeholder="0,00">
+                  <span class="unidade-suffix">m</span>
+                </div>
+              </div>
+
+              <div class="campo-config">
+                <label for="perdaEPS">Perda (%)</label>
+                <div class="input-unidade">
+                  <input type="number" id="perdaEPS" name="perdaEPS" value="5" min="0" max="100" step="0.1"
+                    placeholder="0">
+                  <span class="unidade-suffix">%</span>
+                </div>
+              </div>
+
+              <div class="campo-config">
+                <label for="densidadeEPS">Densidade (opcional)</label>
+                <div class="input-unidade">
+                  <input type="number" id="densidadeEPS" name="densidadeEPS" min="0" step="0.1" placeholder="Ex: 15">
+                  <span class="unidade-suffix">kg/m³</span>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="config-grid" style="margin-top: 12px;">
+              <div class="campo-config">
+                <label>Área da Peça</label>
+                <div class="input-unidade">
+                  <input type="text" id="areaPecaEPS" value="0,00" readonly>
+                  <span class="unidade-suffix">m²</span>
+                </div>
+              </div>
+
+              <div class="campo-config">
+                <label>Peças por m²</label>
+                <div class="input-unidade">
+                  <input type="text" id="pecasPorM2EPS" value="0,00" readonly>
+                  <span class="unidade-suffix">un/m²</span>
+                </div>
+              </div>
+            </div>
+
+            <small style="display:block; margin-top:10px; color:#94a3b8;">
+              Esses dados são de uso interno do operador para cálculo mais preciso do enchimento em EPS.
+            </small>
           </fieldset>
 
           <!-- Configurações técnicas -->
@@ -531,7 +616,8 @@
                 <label for="nomeCliente">Nome do Cliente / Obra</label>
                 <div class="input-unidade">
                   <i class="fas fa-hard-hat unidade-prefix" style="font-size: 0.85rem;"></i>
-                  <input type="text" id="nomeCliente" name="nomeCliente" placeholder="Ex: João Silva — Obra Rua das Flores">
+                  <input type="text" id="nomeCliente" name="nomeCliente"
+                    placeholder="Ex: João Silva — Obra Rua das Flores">
                 </div>
               </div>
             </div>
@@ -566,12 +652,8 @@
                     justify-content: center;
                     min-height: 100px;
                   ">
-                    <img
-                      id="preview-logo"
-                      src=""
-                      alt="Prévia da logo"
-                      style="max-width: 220px; max-height: 80px; object-fit: contain;"
-                    >
+                    <img id="preview-logo" src="" alt="Prévia da logo"
+                      style="max-width: 220px; max-height: 80px; object-fit: contain;">
                   </div>
                 </div>
               </div>
@@ -628,6 +710,34 @@
               <span class="total-subinfo" id="total-subinfo">0,00 m² × R$ 0,00/m² + R$ 0,00 frete</span>
             </div>
             <strong id="res-preco-final" class="total-valor">R$ 0,00</strong>
+          </div>
+
+          <div id="painel-operador" class="painel-operador">
+            <h4><i class="fas fa-user-shield"></i> Modo Operador</h4>
+
+            <div class="resultado-grid">
+              <div class="res-card">
+                <div class="res-icon"><i class="fas fa-sack-dollar"></i></div>
+                <span class="res-label">Lucro Bruto</span>
+                <strong id="res-lucro-bruto" class="res-valor">R$ 0,00</strong>
+              </div>
+
+              <div class="res-card">
+                <div class="res-icon"><i class="fas fa-percent"></i></div>
+                <span class="res-label">Desconto Máximo</span>
+                <strong id="res-desconto-maximo" class="res-valor">R$ 0,00</strong>
+              </div>
+
+              <div class="res-card">
+                <div class="res-icon"><i class="fas fa-tags"></i></div>
+                <span class="res-label">Preço Mínimo Sugerido</span>
+                <strong id="res-preco-minimo" class="res-valor">R$ 0,00</strong>
+              </div>
+            </div>
+
+            <small style="display:block; margin-top:10px; color:#94a3b8;">
+              Dados internos para negociação. Não exibir ao cliente.
+            </small>
           </div>
 
           <div class="detalhes-tecnicos">
@@ -688,9 +798,19 @@
             <button type="button" class="btn-pdf" id="btn-pdf">
               <i class="fas fa-file-pdf"></i> Gerar PDF
             </button>
+
+            <button type="button" class="btn-novo" id="btn-historico">
+              <i class="fas fa-database"></i> Histórico
+            </button>
+
             <button type="button" class="btn-novo" id="btn-novo-calculo">
               <i class="fas fa-plus"></i> Novo Cálculo
             </button>
+          </div>
+
+          <div id="historico" class="historico oculto">
+            <h4><i class="fas fa-database"></i> Histórico de Orçamentos</h4>
+            <div id="lista-historico"></div>
           </div>
 
         </div>
@@ -704,8 +824,13 @@
 
   </main>
 
-  <div id="conteudo-pdf" class="pdf-conteudo"></div>
+  <div id="conteudo-pdf" class="pdf-conteudo" style="display: none;"></div>
 
-  <script src="js/calculo.js"></script>
+  <!-- 🔥 SCRIPT DO PDF (OBRIGATÓRIO) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <!-- 🔧 SEU SISTEMA -->
+  <script type="module" src="js/calculo.js"></script>
 </body>
+
 </html>

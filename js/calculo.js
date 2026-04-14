@@ -4,9 +4,32 @@
  * Uso: Sistema interno de fábrica (local)
  */
 
+// 🔥 FIREBASE (TOPO DO ARQUIVO)
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore,
+  addDoc,
+  collection,
+  getDocs,
+  query,
+  orderBy
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBQq4IFMw4YPM3FglF3kynFZ4dxjTvBMzo",
+  authDomain: "trelisys-bd4f4.firebaseapp.com",
+  projectId: "trelisys-bd4f4",
+  storageBucket: "trelisys-bd4f4.firebasestorage.app",
+  messagingSenderId: "34918837379",
+  appId: "1:34918837379:web:988ab6f2caeb72a6867fb6"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
 'use strict';
 
-const VERSAO_SISTEMA = '1.4.0';
+const VERSAO_SISTEMA = '1.4.1';
 
 /* ============================================================
    CONFIGURAÇÃO — CREDENCIAIS LOCAIS
@@ -21,7 +44,6 @@ const USUARIOS = [
    CONSTANTES TÉCNICAS
    ============================================================ */
 const TECH = {
-  EPS_POR_M2: 6.25,
   CERAMICA_POR_M2: 8.33,
   CONCRETO_H8: 0.042,
   CONCRETO_H12: 0.058,
@@ -41,14 +63,18 @@ const estado = {
   ultimoCalculo: null,
 };
 
+let historicoCarregado = false;
+
 /* ============================================================
    UTILITÁRIOS
    ============================================================ */
 function formatarMoeda(valor) {
   const numero = Number(valor) || 0;
-  return numero.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  return numero.toLocaleString('pt-BR', {
+    style: 'currency',
+    currency: 'BRL'
+  });
 }
-
 
 function formatarNumero(valor, decimais = 2) {
   const numero = Number(valor) || 0;
@@ -57,7 +83,6 @@ function formatarNumero(valor, decimais = 2) {
     maximumFractionDigits: decimais,
   });
 }
-
 
 function atualizarVersaoSistema() {
   setTexto('versao-hero', `Sistema Interno v${VERSAO_SISTEMA}`);
@@ -80,8 +105,8 @@ function lerNumero(id) {
   const texto = String(el.value).replace(',', '.').trim();
   if (texto === '') return NaN;
 
-  const v = parseFloat(texto);
-  return Number.isNaN(v) ? NaN : v;
+  const valor = parseFloat(texto);
+  return Number.isNaN(valor) ? NaN : valor;
 }
 
 function mostrar(id) {
@@ -140,6 +165,39 @@ function atualizarCamposTrelica(quantidadeTrelicas, comprimentoCadaTrelica, metr
   setValor('totalMetrosTrelica', formatarNumero(metrosLinearesTrelica));
 }
 
+function calcularDadosEPS() {
+  const comprimentoEPS = lerNumero('comprimentoEPS');
+  const larguraEPS = lerNumero('larguraEPS');
+  const perdaEPS = lerNumero('perdaEPS');
+
+  if (
+    isNaN(comprimentoEPS) || comprimentoEPS <= 0 ||
+    isNaN(larguraEPS) || larguraEPS <= 0
+  ) {
+    setValor('areaPecaEPS', '0,00');
+    setValor('pecasPorM2EPS', '0,00');
+
+    return {
+      areaPecaEPS: 0,
+      pecasPorM2EPS: 0,
+      perdaEPS: 0,
+    };
+  }
+
+  const areaPecaEPS = comprimentoEPS * larguraEPS;
+  const pecasPorM2EPS = areaPecaEPS > 0 ? 1 / areaPecaEPS : 0;
+  const perdaNormalizada = !isNaN(perdaEPS) && perdaEPS >= 0 ? perdaEPS : 0;
+
+  setValor('areaPecaEPS', formatarNumero(areaPecaEPS, 3));
+  setValor('pecasPorM2EPS', formatarNumero(pecasPorM2EPS, 2));
+
+  return {
+    areaPecaEPS,
+    pecasPorM2EPS,
+    perdaEPS: perdaNormalizada,
+  };
+}
+
 /* ============================================================
    LOGIN
    ============================================================ */
@@ -185,9 +243,9 @@ function inicializarLogin() {
   });
 
   toggleSenha?.addEventListener('click', () => {
-    const visivel = inputSenha?.type === 'text';
     if (!inputSenha) return;
 
+    const visivel = inputSenha.type === 'text';
     inputSenha.type = visivel ? 'password' : 'text';
     toggleSenha.innerHTML = visivel
       ? '<i class="fas fa-eye"></i>'
@@ -307,6 +365,7 @@ function sair() {
   estado.usuarioNome = '';
   estado.usuarioPerfil = '';
   estado.ultimoCalculo = null;
+  historicoCarregado = false;
 
   const usuarioLogin = document.getElementById('usuario-login');
   const senhaLogin = document.getElementById('senha-login');
@@ -316,6 +375,7 @@ function sair() {
 
   ocultar('tela-sistema');
   ocultar('resultados');
+  ocultar('historico');
   mostrar('tela-login');
 }
 
@@ -357,6 +417,7 @@ function alternarCamposDimensao() {
     ocultar('campos-regular');
     mostrar('campos-irregular');
   }
+
   ocultar('alerta-campos');
   limparCamposTrelica();
 }
@@ -444,17 +505,39 @@ function calcularOrcamento() {
       `Dir: ${formatarNumero(ladoDir)}m`;
   }
 
-  const fatorEnchimento = estado.enchimento === 'eps'
-    ? TECH.EPS_POR_M2
-    : TECH.CERAMICA_POR_M2;
+  let fatorEnchimento = 0;
+let qtdEnchimentoBase = 0;
+let qtdEnchimento = 0;
+let areaPecaEPS = 0;
+let pecasPorM2EPS = 0;
+let perdaEPS = 0;
 
-  const qtdEnchimento = Math.ceil(area * fatorEnchimento);
+if (estado.enchimento === 'eps') {
+  const dadosEPS = calcularDadosEPS();
 
-  const precoUnitarioEnchimento = estado.enchimento === 'eps'
-    ? precoEPS
-    : precoCeramica;
+  areaPecaEPS = dadosEPS.areaPecaEPS;
+  pecasPorM2EPS = dadosEPS.pecasPorM2EPS;
+  perdaEPS = dadosEPS.perdaEPS;
 
-  const custoEnchimento = qtdEnchimento * precoUnitarioEnchimento;
+  if (pecasPorM2EPS <= 0) {
+    mostrarAlertaCampos('Informe comprimento e largura válidos para o EPS.');
+    return;
+  }
+
+  fatorEnchimento = pecasPorM2EPS;
+  qtdEnchimentoBase = area * fatorEnchimento;
+  qtdEnchimento = Math.ceil(qtdEnchimentoBase * (1 + perdaEPS / 100));
+} else {
+  fatorEnchimento = TECH.CERAMICA_POR_M2;
+  qtdEnchimentoBase = area * fatorEnchimento;
+  qtdEnchimento = Math.ceil(qtdEnchimentoBase);
+}
+
+const precoUnitarioEnchimento = estado.enchimento === 'eps'
+  ? precoEPS
+  : precoCeramica;
+
+const custoEnchimento = qtdEnchimento * precoUnitarioEnchimento;
 
   const quantidadeTrelicas = Math.ceil(larguraBase / TECH.ESPACAMENTO_TRELICA);
   const comprimentoCadaTrelica = comprimentoBase;
@@ -471,6 +554,11 @@ function calcularOrcamento() {
   const precoVenda = custoFabrica * (1 + margem / 100);
   const precoFinal = precoVenda + frete;
   const precoM2Venda = area > 0 ? precoFinal / area : 0;
+
+  const lucroBruto = precoVenda - custoFabrica;
+  const descontoMaximo = lucroBruto * 0.7;
+  const precoMinimoSugerido = precoFinal - descontoMaximo;
+
 
   const volumeConcreto = area * (
     estado.tipoLaje === 'H8'
@@ -504,11 +592,18 @@ function calcularOrcamento() {
     volumeConcreto,
     enchimentoTexto,
     formatoTexto,
+    lucroBruto,
+    descontoMaximo,
+    precoMinimoSugerido,
     tipoLaje: estado.tipoLaje,
     nomeCliente,
     data: dataAtual(),
+    timestamp: Date.now(),
   };
 
+  historicoCarregado = false;
+
+  salvarOrcamento(estado.ultimoCalculo);
   exibirResultados(estado.ultimoCalculo);
 }
 
@@ -526,6 +621,9 @@ function exibirResultados(c) {
   setTexto('res-custo-producao', formatarMoeda(c.custoFabrica));
   setTexto('res-custo-venda', formatarMoeda(c.precoVenda));
   setTexto('res-preco-final', formatarMoeda(c.precoFinal));
+  setTexto('res-lucro-bruto', formatarMoeda(c.lucroBruto || 0));
+  setTexto('res-desconto-maximo', formatarMoeda(c.descontoMaximo || 0));
+  setTexto('res-preco-minimo', formatarMoeda(c.precoMinimoSugerido || 0));
 
   setTexto(
     'total-subinfo',
@@ -550,6 +648,11 @@ function exibirResultados(c) {
     ocultar('cliente-resultado');
   }
 
+    if (estado.usuarioPerfil === 'comercial') {
+    ocultar('painel-operador');
+  } else {
+    mostrar('painel-operador');
+  }
   mostrar('resultados');
   document.getElementById('resultados')?.scrollIntoView({
     behavior: 'smooth',
@@ -578,11 +681,15 @@ function limparFormulario() {
   limparCamposTrelica();
 
   ocultar('resultados');
+  ocultar('historico');
   ocultar('alerta-campos');
+
   estado.ultimoCalculo = null;
+  historicoCarregado = false;
 
   document.querySelectorAll('[data-formato]').forEach((b) => b.classList.remove('ativo'));
   document.querySelector('[data-formato="regular"]')?.classList.add('ativo');
+
   estado.formato = 'regular';
   alternarCamposDimensao();
 
@@ -598,7 +705,7 @@ async function gerarPDF() {
     return;
   }
 
-  const c = estado.ultimoCalculo;
+  const c = dadosParaCliente(estado.ultimoCalculo);
   const conteudo = document.getElementById('conteudo-pdf');
 
   if (!conteudo) {
@@ -659,10 +766,13 @@ async function gerarPDF() {
           ">ORÇAMENTO</h1>
         </div>
 
-        <div style="text-align: right; min-width: 140px;">
-          <div style="font-size: 12px; color: #6b7280;">Emitido em</div>
-          <div style="font-size: 16px; font-weight: bold; color: #111827;">${c.data}</div>
+      <div style="text-align: right; min-width: 160px;">
+        <div style="font-size: 12px; color: #6b7280;">Emitido em</div>
+        <div style="font-size: 16px; font-weight: bold; color: #111827;">${c.data}</div>
+        <div style="font-size: 11px; color: #6b7280; margin-top: 6px;">
+          Sistema v${VERSAO_SISTEMA}
         </div>
+       </div>
       </div>
 
       ${
@@ -703,32 +813,32 @@ async function gerarPDF() {
           RESUMO FINANCEIRO
         </div>
 
-          <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
-            <tr>
-              <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb;">Área Total</td>
-              <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb; text-align: right; font-weight: 600;">
-                ${formatarNumero(c.area)} m²
-              </td>
-            </tr>
-            <tr>
-              <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb;">Preço de Venda</td>
-              <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb; text-align: right; font-weight: 600;">
-                ${formatarMoeda(c.precoVenda)}
-              </td>
-            </tr>
-            <tr>
-              <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb;">Frete</td>
-              <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb; text-align: right; font-weight: 600;">
-                ${formatarMoeda(c.frete)}
-              </td>
-            </tr>
-            <tr style="background: #fff7ed;">
-              <td style="padding: 12px; font-size: 15px; font-weight: bold; color: #9a3412;">TOTAL FINAL</td>
-              <td style="padding: 12px; text-align: right; font-size: 17px; font-weight: bold; color: #ea580c;">
-                ${formatarMoeda(c.precoFinal)}
+        <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+          <tr>
+            <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb;">Área Total</td>
+            <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb; text-align: right; font-weight: 600;">
+              ${formatarNumero(c.area)} m²
             </td>
           </tr>
-            </table>
+          <tr>
+            <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb;">Preço de Venda</td>
+            <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb; text-align: right; font-weight: 600;">
+              ${formatarMoeda(c.precoVenda)}
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb;">Frete</td>
+            <td style="padding: 10px 12px; border-bottom: 1px solid #e5e7eb; text-align: right; font-weight: 600;">
+              ${formatarMoeda(c.frete)}
+            </td>
+          </tr>
+          <tr style="background: #fff7ed;">
+            <td style="padding: 12px; font-size: 15px; font-weight: bold; color: #9a3412;">TOTAL FINAL</td>
+            <td style="padding: 12px; text-align: right; font-size: 17px; font-weight: bold; color: #ea580c;">
+              ${formatarMoeda(c.precoFinal)}
+            </td>
+          </tr>
+        </table>
       </div>
 
       <div style="
@@ -920,14 +1030,11 @@ async function gerarPDF() {
   }
 
   if (typeof html2pdf === 'undefined') {
-    const script = document.createElement('script');
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
-    script.onload = executarPDF;
-    script.onerror = () => alert('Não foi possível carregar o gerador de PDF.');
-    document.head.appendChild(script);
-  } else {
-    executarPDF();
-  }
+  alert('Erro: biblioteca de PDF não carregada.');
+  return;
+}
+
+ executarPDF();
 }
 
 function inicializarLogoEmpresa() {
@@ -967,25 +1074,135 @@ function inicializarLogoEmpresa() {
 }
 
 /* ============================================================
+   HISTÓRICO / CLIENTE
+   ============================================================ */
+async function carregarHistorico() {
+  const lista = document.getElementById('lista-historico');
+  if (!lista) return;
+
+  lista.innerHTML = '<p>Carregando histórico...</p>';
+
+  try {
+    const q = query(
+      collection(db, "orcamentos"),
+      orderBy("timestamp", "desc")
+    );
+
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) {
+      lista.innerHTML = '<p>Nenhum orçamento encontrado.</p>';
+      return;
+    }
+
+    let html = '';
+
+    snapshot.forEach((doc) => {
+      const item = doc.data();
+
+      html += `
+        <div class="historico-item" style="
+          border: 1px solid #334155;
+          border-radius: 10px;
+          padding: 12px;
+          margin-bottom: 10px;
+          background: #0f172a;
+        ">
+          <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+            <strong style="color:#f8fafc;">
+              ${item.nomeCliente || 'Sem cliente'}
+            </strong>
+            <span style="color:#94a3b8; font-size: 0.9rem;">
+              ${item.data || '-'}
+            </span>
+          </div>
+
+          <div style="margin-top:8px; color:#cbd5e1;">
+            <div>Área: ${formatarNumero(item.area)} m²</div>
+            <div>Valor: ${formatarMoeda(item.precoFinal)}</div>
+            <div>Preço por m²: ${formatarMoeda(item.precoM2Venda)}/m²</div>
+            <div>Tipo de Laje: ${item.tipoLaje || '-'}</div>
+          </div>
+        </div>
+      `;
+    });
+
+    lista.innerHTML = html;
+  } catch (erro) {
+    console.error('Erro ao carregar histórico:', erro);
+    lista.innerHTML = '<p>Erro ao carregar histórico.</p>';
+  }
+}
+
+async function alternarHistorico() {
+  const historico = document.getElementById('historico');
+  if (!historico) return;
+
+  const estaOculto = historico.classList.contains('oculto');
+
+  if (estaOculto) {
+    historico.classList.remove('oculto');
+
+    if (!historicoCarregado) {
+      await carregarHistorico();
+      historicoCarregado = true;
+    }
+  } else {
+    historico.classList.add('oculto');
+  }
+}
+
+function dadosParaCliente(dados) {
+  return {
+    area: dados.area,
+    precoFinal: dados.precoFinal,
+    precoVenda: dados.precoVenda,
+    precoM2Venda: dados.precoM2Venda,
+    frete: dados.frete,
+    tipoLaje: dados.tipoLaje,
+    formatoTexto: dados.formatoTexto,
+    enchimentoTexto: dados.enchimentoTexto,
+    qtdEnchimento: dados.qtdEnchimento,
+    quantidadeTrelicas: dados.quantidadeTrelicas,
+    comprimentoCadaTrelica: dados.comprimentoCadaTrelica,
+    metrosLinearesTrelica: dados.metrosLinearesTrelica,
+    volumeConcreto: dados.volumeConcreto,
+    nomeCliente: dados.nomeCliente,
+    data: dados.data
+  };
+}
+
+/* ============================================================
+   FIREBASE
+   ============================================================ */
+async function salvarOrcamento(dados) {
+  try {
+    await addDoc(collection(db, "orcamentos"), dados);
+    console.log("✅ Orçamento salvo no Firebase");
+  } catch (erro) {
+    console.error("❌ Erro ao salvar:", erro);
+  }
+}
+
+/* ============================================================
    INICIALIZAÇÃO
    ============================================================ */
 document.addEventListener('DOMContentLoaded', () => {
+  atualizarVersaoSistema();
 
-  atualizarVersaoSistema(); // 👈 AQUI
-
- 
   document.addEventListener('click', (e) => {
-  if (window.innerWidth > 768) return;
+    if (window.innerWidth > 768) return;
 
-  const clicouDentroDoMenu = e.target.closest('.nav-links');
-  const clicouNoBotaoMenu = e.target.closest('#menu-toggle');
+    const clicouDentroDoMenu = e.target.closest('.nav-links');
+    const clicouNoBotaoMenu = e.target.closest('#menu-toggle');
 
-  if (!clicouDentroDoMenu && !clicouNoBotaoMenu) {
-    document.querySelectorAll('.dropdown').forEach((item) => {
-      item.classList.remove('open');
-    });
-  }
-});
+    if (!clicouDentroDoMenu && !clicouNoBotaoMenu) {
+      document.querySelectorAll('.dropdown').forEach((item) => {
+        item.classList.remove('open');
+      });
+    }
+  });
+
   inicializarLogin();
   inicializarControles();
   inicializarLogoEmpresa();
@@ -1000,6 +1217,9 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('btn-pdf')
     ?.addEventListener('click', gerarPDF);
 
+  document.getElementById('btn-historico')
+    ?.addEventListener('click', alternarHistorico);
+
   document.getElementById('btn-novo-calculo')
     ?.addEventListener('click', limparFormulario);
 
@@ -1009,40 +1229,40 @@ document.addEventListener('DOMContentLoaded', () => {
   const menuToggle = document.getElementById('menu-toggle');
   const navLinks = document.querySelector('.nav-links');
 
-menuToggle?.addEventListener('click', () => {
-  navLinks?.classList.toggle('active');
+  menuToggle?.addEventListener('click', () => {
+    navLinks?.classList.toggle('active');
 
-  const menuAberto = navLinks?.classList.contains('active');
+    const menuAberto = navLinks?.classList.contains('active');
 
-  if (!menuAberto) {
-    document.querySelectorAll('.dropdown').forEach((item) => {
-      item.classList.remove('open');
-    });
-  }
-});
-
-document.querySelectorAll('.dropbtn').forEach((btn) => {
-  btn.addEventListener('click', (e) => {
-    if (window.innerWidth > 768) return;
-
-    e.preventDefault();
-    e.stopPropagation();
-
-    const dropdown = btn.parentElement;
-    if (!dropdown) return;
-
-    const jaEstaAberto = dropdown.classList.contains('open');
-
-    document.querySelectorAll('.dropdown').forEach((item) => {
-      if (item !== dropdown) {
+    if (!menuAberto) {
+      document.querySelectorAll('.dropdown').forEach((item) => {
         item.classList.remove('open');
-      }
-    });
-
-    dropdown.classList.toggle('open', !jaEstaAberto);
-    btn.blur();
+      });
+    }
   });
-});
+
+  document.querySelectorAll('.dropbtn').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      if (window.innerWidth > 768) return;
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      const dropdown = btn.parentElement;
+      if (!dropdown) return;
+
+      const jaEstaAberto = dropdown.classList.contains('open');
+
+      document.querySelectorAll('.dropdown').forEach((item) => {
+        if (item !== dropdown) {
+          item.classList.remove('open');
+        }
+      });
+
+      dropdown.classList.toggle('open', !jaEstaAberto);
+      btn.blur();
+    });
+  });
 
   [
     'larguraVao',
@@ -1057,4 +1277,18 @@ document.querySelectorAll('.dropbtn').forEach((btn) => {
       if (e.key === 'Enter') calcularOrcamento();
     });
   });
+
+  // 🔥 ATUALIZAÇÃO AUTOMÁTICA DO EPS
+[
+  'comprimentoEPS',
+  'larguraEPS',
+  'perdaEPS'
+].forEach((id) => {
+  document.getElementById(id)?.addEventListener('input', calcularDadosEPS);
+});
+
+document.getElementById('marcaEPS')?.addEventListener('change', calcularDadosEPS);
+
+// cálculo inicial ao abrir o sistema
+calcularDadosEPS();
 });

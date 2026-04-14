@@ -136,6 +136,16 @@ a {
 /* ============================================================
    NAVBAR
    ============================================================ */
+
+   /* BOTÃO HAMBURGUER — PADRÃO (DESKTOP) */
+.menu-toggle {
+  display: none;
+}
+
+.menu-toggle:hover {
+  color: var(--cor-acento);
+}
+
 .navbar {
   position: relative;
   z-index: 100;
@@ -1549,12 +1559,12 @@ a {
     display: block;
   }
 
-  .menu-toggle {
-    display: block;
-    font-size: 22px;
-    color: white;
-    cursor: pointer;
-  }
+.menu-toggle {
+  display: block;
+  font-size: 22px;
+  color: white;
+  cursor: pointer;
+}
 
   .hero-container {
     padding: 50px 24px;
